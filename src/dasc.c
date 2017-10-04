@@ -8,7 +8,7 @@ typedef struct {
 } drone;
 
 typedef struct {
-	int airspace[ n ] [ m ] ;
+	int[]  airspace[ n ] [ m ] ;
 } air;
 
 void main(int argc, char* argv[]) {
@@ -20,7 +20,8 @@ void main(int argc, char* argv[]) {
   	air *as = (air *)malloc(sizeof(air)*num_drones);
 	dthreads=(pthread_t *)malloc(num_drones*sizeof(*dthreads));
 	for (size_t i = 0; i < num_drones; i++) {
-		as[count].id = count;
+		as[count].n = count;
+		as[count].m = count;
 		pthread_create(&dtheads[count],NULL,... , ...);	
 		  
  }
