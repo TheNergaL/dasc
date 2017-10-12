@@ -14,6 +14,9 @@ int main(int argc, char** argv) {
 	return0 = pthread_create(&thread0, NULL, paramFunc, (void *) msg0);
 	return1 = pthread_create(&thread1, NULL, paramFunc, (void *) msg1);
 
+	pthread_join(thread0, NULL);
+	pthread_join(thread1, NULL);
+
 	return 0;
 }
 void *paramFunc(void *arg1) {
