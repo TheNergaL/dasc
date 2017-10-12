@@ -1,4 +1,4 @@
-#include <pthread>
+#include <pthread.h>
 
 void *paramFunc(void *arg0);
 
