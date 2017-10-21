@@ -4,8 +4,8 @@
 #include <pthread.h>
 #include <time.h>
 
-#define NUM_THREADS 10
-#define NUM_OBSTACLES 2
+#define NUM_THREADS 
+#define NUM_OBSTACLES 
 #define LENGTH 50
 
 int sleep_time = 200000;
@@ -15,8 +15,8 @@ char grid[LENGTH][LENGTH];
 void create_grid();
 void print_grid();
 void *move_drone(void *threadarg);
-void set_obstacles();
-void go_around(int*, int*, char, int);
+void placeObstacles();
+void avoid(int*, int*, char, int);
 
 struct thread_data{
   int thread_id;
@@ -33,8 +33,10 @@ struct obstacles obstacle_array[NUM_OBSTACLES];
 
 int main (int argc, char **argv)
 {
+  NUM_THREADS = argv[1];
+  NUM_OBSTACLES = argv[2];
   create_grid();
-  set_obstacles();
+  placeObstacles();
   
   pthread_t threads[NUM_THREADS]; //Thread Address
   //int *taskids[NUM_THREADS];
@@ -51,14 +53,14 @@ int main (int argc, char **argv)
     rc = pthread_create(&threads[t], NULL, move_drone, (void *) 
 			&thread_data_array[t]);
     if (rc) {
-      printf("ERROR; return code from pthread_create() is %d\n", rc);
+      printf("ERROR: return code from pthread_create() is %d\n", rc);
       exit(-1);
     }
   }
   pthread_exit(NULL);
 }
 
-void go_around(int* cx, int* cy, char direction, int taskid){
+void avoid(int* cx, int* cy, char direction, int taskid){
     
     if(direction == '>'){
             grid[(*cx)++][(*cy)] = taskid;//down
@@ -90,12 +92,12 @@ void go_around(int* cx, int* cy, char direction, int taskid){
     }
 }
 
-void set_obstacles(){
+// define x, y positions of obstacles and places them on the grid
+void placeObstacles(){
     obstacle_array[0].x = 0;
     obstacle_array[0].y = 5;
-    obstacle_array[1].x = 0;
-    obstacle_array[1].y = 7;
-    obstacle_array[2].x = 7;
+    obstacle_array[1].x = 1;
+    obstacle_array[1].y = 5;
     
     for(int i = 0; i < NUM_OBSTACLES; i++){
         int x = obstacle_array[i].x;
@@ -128,7 +130,7 @@ void *move_drone(void *threadarg){
   char direction = '>';
   for(;curr_y < dest_y; curr_y++ ){
       if(grid[curr_x][curr_y+1] == 'X'){
-        go_around(&curr_x,&curr_y, direction, taskid);
+        avoid(&curr_x,&curr_y, direction, taskid);
       }
       grid[curr_x][curr_y+1] = taskid;
       grid[curr_x][curr_y] = direction;
@@ -141,7 +143,7 @@ void *move_drone(void *threadarg){
   direction = 'V';
   for(;curr_x < dest_x; curr_x++ ){
       if(grid[curr_x+1][curr_y] == 'X'){
-        go_around(&curr_x,&curr_y, direction, taskid);
+        avoid(&curr_x,&curr_y, direction, taskid);
       }
       grid[curr_x+1][curr_y] = taskid;
       grid[curr_x][curr_y] = direction;
@@ -153,7 +155,7 @@ void *move_drone(void *threadarg){
   direction = '^';
   for(;curr_x > start_x; curr_x-- ){ 
       if(grid[curr_x-1][curr_y] =='X'){
-        go_around(&curr_x,&curr_y, direction, taskid);
+        avoid(&curr_x,&curr_y, direction, taskid);
       }
       grid[curr_x-1][curr_y] = taskid;
       grid[curr_x][curr_y] = direction;
@@ -165,7 +167,7 @@ void *move_drone(void *threadarg){
   direction = '<';
   for(;curr_y > start_y; curr_y-- ){
       if(grid[curr_x][curr_y-1] == 'X'){
-        go_around(&curr_x,&curr_y, direction, taskid);
+        avoid(&curr_x,&curr_y, direction, taskid);
       }
       grid[curr_x][curr_y-1] = taskid;
       grid[curr_x][curr_y] = direction;
