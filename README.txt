@@ -6,8 +6,8 @@ Dependencies : C99/GNU99 (for -lpthread)
 The goal of this lab is to create an abstract drone collision avoidance program,simulating a real-time embedded system making use of parallelism, multi-threading and concurrency in the C language.   
 
 To build and run it on *nix systems: 
-Open terminal & navigate to the 'dasc' directory (yes it's a typo)
-Once in the dasc directory, type 'make' and the project will be built to 'tuckerpo_proj1' output file
+Open terminal & navigate to the 'dcas' directory 
+Once in the dcas directory, type 'make' and the project will be built to 'tuckerpo_proj1' output file
 ./tuckerpo_proj1
 
 Since POSIX threads are not native to Windows, you must run this program in mingw64 bash shell.
@@ -15,13 +15,13 @@ In the bash shell, in the dasc directory, type 'gcc -std=c99 dcas.c -o dcas.exe 
 This will envoke the GNU C Compiler with the C99 standarad on your .c file, linking the pthread library for building, and create 
 and executable called dcas.exe, which can then be run.
 
-Alternatively just run the *nix shell script I've included here.
+Alternatively just run the *nix shell script I've included here by navigating to the dcas directory and typing capture into the terminal.
 
 *Note: I know the output is kinda ugly. There are 10 drones that are created sequentially at [0,0], [1,1], [2,2], ... etc
 
 The drones are represented by their pthread numbers, 0, 1, 2....
 
-Upon instantiation, each drone is assigned a package to pick up arbitrarily. These are represented by the apex of the drone's flight path (the position
+Upon instantiation, each drone is assigned a package to pick up arb0itrarily. These are represented by the apex of the drone's flight path (the position
 where the drone turns around to come back home.) 
 
 There are also obstacles for the to avoid drone printed about the map, represented by char 'X'
