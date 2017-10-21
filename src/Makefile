@@ -1,5 +1,5 @@
 CC = gcc            #the compiler
-CFLAGS = -g -Wall   #compiler flags
+CFLAGS = -g -Wall -std=c99  #compiler flags
 
 all: dcas
 
