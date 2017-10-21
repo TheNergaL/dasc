@@ -4,9 +4,9 @@
 #include <pthread.h>
 #include <time.h>
 
-long NUM_THREADS; 
-long NUM_OBSTACLES; 
-long LENGTH = 50;
+#define NUM_DRONES 10 
+#define NUM_OBSTACLES 2 
+#define LENGTH 50
 
 int sleep_time = 200000;
 
@@ -23,7 +23,7 @@ struct thread_data{
   int sx,sy;
   int dx,dy;
 };
-struct thread_data thread_data_array[NUM_THREADS];
+struct thread_data thread_data_array[NUM_DRONES];
 
 struct obstacles{
     int x;
@@ -33,16 +33,14 @@ struct obstacles obstacle_array[NUM_OBSTACLES];
 
 int main (int argc, char **argv)
 {
-  NUM_THREADS = argv[1];
-  NUM_OBSTACLES = argv[2];
   create_grid();
   placeObstacles();
   
-  pthread_t threads[NUM_THREADS]; //Thread Address
-  //int *taskids[NUM_THREADS];
+  pthread_t threads[NUM_DRONES]; //Thread Address
+  //int *taskids[NUM_DRONES];
   int rc; //Holds thread return code
   long t; //Loop Counter
-  for(t=0;t<NUM_THREADS;t++) {
+  for(t=0;t<NUM_DRONES;t++) {
 
     thread_data_array[t].thread_id = t;
     thread_data_array[t].sx = t;
@@ -96,8 +94,8 @@ void avoid(int* cx, int* cy, char direction, int taskid){
 void placeObstacles(){
     obstacle_array[0].x = 0;
     obstacle_array[0].y = 5;
-    obstacle_array[1].x = 1;
-    obstacle_array[1].y = 5;
+    obstacle_array[1].x = 5;
+    obstacle_array[1].y = 10;
     
     for(int i = 0; i < NUM_OBSTACLES; i++){
         int x = obstacle_array[i].x;
