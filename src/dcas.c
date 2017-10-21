@@ -195,7 +195,7 @@ void *fly(void *arg0){
         avoid(&curr_x,&curr_y, nextMove, taskID);
       }
       airspace[curr_x][curr_y-1] = taskID;
-      airspace[curr_x][curr_y] = nextMove;
+      airspace[curr_x][curr_y] = '.';
       printMap();
       usleep(sleep_2);
       
