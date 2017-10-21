@@ -23,13 +23,13 @@ struct threadData{
   int airport_x,airport_y;
   int package_x,package_y;
 };
-struct threadData thread_data_array[NUM_DRONES];
+struct threadData threadDataArr[NUM_DRONES];
 
 struct obstacles{
     int obs_x;
     int obs_y;
 };
-struct obstacles obstacle_array[NUM_OBSTACLES];
+struct obstacles obsArr[NUM_OBSTACLES];
 
 int main (int argc, char **argv)
 {
@@ -45,15 +45,16 @@ int main (int argc, char **argv)
 
     //drones all start at [1,1], [2,2], [3,3] ... [n,n]
     //all packages are located at arbitrary locations through the airspace
+    srand ( time(NULL) ); //proper random seeding
     int r1 = rand() % MAP_SIZE;
     int r2 = rand() % MAP_SIZE; 
-    thread_data_array[t].thread_id = t;
-    thread_data_array[t].airport_x = t;
-    thread_data_array[t].airport_y = t;
-    thread_data_array[t].package_x = t+r1;
-    thread_data_array[t].package_y = t+r2;
+    threadDataArr[t].thread_id = t;
+    threadDataArr[t].airport_x = t;
+    threadDataArr[t].airport_y = t;
+    threadDataArr[t].package_x = t+r1;
+    threadDataArr[t].package_y = t+r2;
 
-    retVal = pthread_create(&threads[t], NULL, fly, (void *) &thread_data_array[t]);
+    retVal = pthread_create(&threads[t], NULL, fly, (void *) &threadDataArr[t]);
     if (retVal) {
       printf("ERROR: return code from pthread_create() is %d\n", retVal);
       exit(-1);
@@ -96,18 +97,18 @@ void avoid(int* currPosX, int* currPosY, char nextMove, int taskID){
 
 // define x, y positions of obstacles and places them on the airspace
 void placeObstacles(){
-    obstacle_array[0].obs_x = 0;
-    obstacle_array[0].obs_y = 5;
-    obstacle_array[1].obs_x = 5;
-    obstacle_array[1].obs_y = 10;
-    obstacle_array[2].obs_x = 5;
-    obstacle_array[2].obs_y = 15;
-    obstacle_array[3].obs_x = 8;
-    obstacle_array[3].obs_y = 14;
+    obsArr[0].obs_x = 0;
+    obsArr[0].obs_y = 5;
+    obsArr[1].obs_x = 5;
+    obsArr[1].obs_y = 10;
+    obsArr[2].obs_x = 5;
+    obsArr[2].obs_y = 15;
+    obsArr[3].obs_x = 8;
+    obsArr[3].obs_y = 14;
     
     for(int i = 0; i < NUM_OBSTACLES; i++){
-        int x = obstacle_array[i].obs_x;
-        int y = obstacle_array[i].obs_y;
+        int x = obsArr[i].obs_x;
+        int y = obsArr[i].obs_y;
         
         airspace[x][y]= 'X';
     }
