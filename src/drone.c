@@ -1,5 +1,5 @@
-#include "map.h"
-#include "drone.h"
+#include "../includes/map.h"
+#include "../includes/drone.h"
 
 #include <stdio.h>
 #include <unistd.h>
