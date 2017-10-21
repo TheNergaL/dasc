@@ -16,7 +16,7 @@ typedef struct Box{
 	int dest;								//Cood is a destination
 	char item;   							//' ' if nothing,'x' if runway,'X' if destination, '+' if building, '^' if drone
 	int locked;     						//Box currently being used.
-	pthread_mutex_t mutexLock;				//lock box for drone;
+	pthread_mutex_t mtx;				//lock box for drone;
 } Box;
 
 typedef struct Drone{

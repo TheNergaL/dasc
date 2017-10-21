@@ -57,42 +57,42 @@ void removeOld(Map *m,Coord c){
 void setAvoid(Map *m,Drone *d,Coord c,int dir,int axis){
 	if(axis == 0){
 		if(dir == 0){
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mutexLock));
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			d->currLocation.point[0] -= 1;
 			setMap(d,m);
 			removeOld(m,c);
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mutexLock));
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 		}
 		else if(dir == 1){
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mutexLock));
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			d->currLocation.point[0] += 1;
 			setMap(d,m);
 			removeOld(m,c);
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mutexLock));
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 		}
 	}
 	else if(axis == 1){
 		if(dir == 0){
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mutexLock));
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			d->currLocation.point[1] -= 1;
 			setMap(d,m);
 			removeOld(m,c);
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mutexLock));
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 		}
 		else if(dir == 1){
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mutexLock));
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			d->currLocation.point[1] += 1;
 			setMap(d,m);
 			removeOld(m,c);
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mutexLock));
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 		}
 	}
 }
@@ -686,15 +686,15 @@ int move(Drone *d,Map *m,int state){
 		Coord locked = c;
 		locked.point[0] -= 1;
 		if(isLocked(d,m,c,locked,1) == 0){
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mutexLock));
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			d->currLocation.point[0] -= 1;
 			d->avoid2 = d->avoid;
 			d->avoid = 1;
 			setMap(d,m);
 			removeOld(m,c);
-			pthread_mutex_unlock(&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mutexLock));
-			pthread_mutex_unlock(&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_unlock(&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
+			pthread_mutex_unlock(&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 		}
 	}
 	//Move down
@@ -702,15 +702,15 @@ int move(Drone *d,Map *m,int state){
 		Coord locked = c;
 		locked.point[0] += 1;
 		if(isLocked(d,m,c,locked,2) == 0){
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mutexLock));
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			d->currLocation.point[0] += 1;
 			d->avoid2 = d->avoid;
 			d->avoid = 2;
 			setMap(d,m);
 			removeOld(m,c);
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mutexLock));
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 		}
 	}
 	//Move left
@@ -718,15 +718,15 @@ int move(Drone *d,Map *m,int state){
 		Coord locked = c;
 		locked.point[1] -= 1;
 		if(isLocked(d,m,c,locked,3) == 0){
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mutexLock));
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			d->currLocation.point[1] -= 1;
 			d->avoid2 = d->avoid;
 			d->avoid = 3;
 			setMap(d,m);
 			removeOld(m,c);
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mutexLock));
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 		}
 		d->move = 1;
 	}
@@ -735,15 +735,15 @@ int move(Drone *d,Map *m,int state){
 		Coord locked = c;
 		locked.point[1] += 1;
 		if(isLocked(d,m,c,locked,4) == 0){
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mutexLock));
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			d->currLocation.point[1] += 1;
 			d->avoid2 = d->avoid;
 			d->avoid = 4;
 			setMap(d,m);
 			removeOld(m,c);
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mutexLock));
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 		}
 		d->move = 1;
 	}
@@ -753,60 +753,60 @@ int move(Drone *d,Map *m,int state){
 			Coord locked = c;
 			locked.point[0] -= 1;
 			if(isLocked(d,m,c,locked,1) == 0){
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mutexLock));
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 				d->currLocation.point[0] -= 1;
 				d->avoid2 = d->avoid;
 				d->avoid = 1;
 				setMap(d,m);
 				removeOld(m,c);
-				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mutexLock));
-				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
+				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			}
 		}
 		else if(d->currLocation.point[0] == -25){
 			Coord locked = c;
 			locked.point[0] += 1;
 			if(isLocked(d,m,c,locked,2) == 0){
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mutexLock));
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 				d->currLocation.point[0] += 1;
 				d->avoid2 = d->avoid;
 				d->avoid = 2;
 				setMap(d,m);
 				removeOld(m,c);
-				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mutexLock));
-				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
+				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			}
 		}
 		else if(d->avoid != 1 && d->avoid2 != 1){
 			Coord locked = c;
 			locked.point[0] += 1;
 			if(isLocked(d,m,c,locked,2) == 0){
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mutexLock));
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 				d->currLocation.point[0] += 1;
 				d->avoid2 = d->avoid;
 				d->avoid = 2;
 				setMap(d,m);
 				removeOld(m,c);
-				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mutexLock));
-				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
+				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			}
 		}
 		else if(d->avoid != 2 && d->avoid2 != 2){
 			Coord locked = c;
 			locked.point[0] -= 1;
 			if(isLocked(d,m,c,locked,1) == 0){
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mutexLock));
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 				d->currLocation.point[0] -= 1;
 				d->avoid2 = d->avoid;
 				d->avoid = 1;
 				setMap(d,m);
 				removeOld(m,c);
-				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mutexLock));
-				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
+				pthread_mutex_unlock(&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			}
 		}
 	}
@@ -816,60 +816,60 @@ int move(Drone *d,Map *m,int state){
 			Coord locked = c;
 			locked.point[1] -= 1;
 			if(isLocked(d,m,c,locked,3) == 0){
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mutexLock));
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 				d->currLocation.point[1] -= 1;
 				d->avoid2 = d->avoid;
 				d->avoid = 3;
 				setMap(d,m);
 				removeOld(m,c);
-				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mutexLock));
-				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
+				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			}
 		}
 		else if(d->currLocation.point[1] == -25){
 			Coord locked = c;
 			locked.point[1] += 1;
 			if(isLocked(d,m,c,locked,4) == 0){
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mutexLock));
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 				d->currLocation.point[1] += 1;
 				d->avoid2 = d->avoid;
 				d->avoid = 4;
 				setMap(d,m);
 				removeOld(m,c);
-				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mutexLock));
-				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
+				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			}
 		}
 		else if (d->avoid != 3 && d->avoid2 != 3){
 			Coord locked = c;
 			locked.point[1] += 1;
 			if(isLocked(d,m,c,locked,4) == 0){
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mutexLock));
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 				d->currLocation.point[1] += 1;
 				d->avoid2 = d->avoid;
 				d->avoid = 4;
 				setMap(d,m);
 				removeOld(m,c);
-				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mutexLock));
-				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
+				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			}
 		}
 		else if (d->avoid != 4 && d->avoid2 != 4){
 			Coord locked = c;
 			locked.point[1] -= 1;
 			if(isLocked(d,m,c,locked,3) == 0){
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mutexLock));
-				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
+				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 				d->currLocation.point[1] -= 1;
 				d->avoid2 = d->avoid;
 				d->avoid = 3;
 				setMap(d,m);
 				removeOld(m,c);
-				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mutexLock));
-				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
+				pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			}
 		}
 	}
@@ -878,60 +878,60 @@ int move(Drone *d,Map *m,int state){
 		Coord locked = c;
 		locked.point[0] -= 1;
 		if(isLocked(d,m,c,locked,1) == 0){
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mutexLock));
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			d->currLocation.point[0] -= 1;
 			d->avoid2 = d->avoid;
 			d->avoid = 1;
 			setMap(d,m);
 			removeOld(m,c);
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mutexLock));
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 		}
 	}
 	else if(d->avoid == 2){
 		Coord locked = c;
 		locked.point[0] += 1;
 		if(isLocked(d,m,c,locked,2) == 0){
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mutexLock));
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			d->currLocation.point[0] += 1;
 			d->avoid2 = d->avoid;
 			d->avoid = 2;
 			setMap(d,m);
 			removeOld(m,c);
-			pthread_mutex_unlock(&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mutexLock));
-			pthread_mutex_unlock(&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_unlock(&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
+			pthread_mutex_unlock(&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 		}
 	}
 	else if(d->avoid == 3){
 		Coord locked = c;
 		locked.point[1] -= 1;
 		if(isLocked(d,m,c,locked,3) == 0){
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mutexLock));
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			d->currLocation.point[1] -= 1;
 			d->avoid2 = d->avoid;
 			d->avoid = 3;
 			setMap(d,m);
 			removeOld(m,c);
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mutexLock));
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 		}
 	}
 	else if(d->avoid == 4){
 		Coord locked = c;
 		locked.point[1] += 1;
 		if(isLocked(d,m,c,locked,4) == 0){
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mutexLock));
-			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
+			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 			d->currLocation.point[1] += 1;
 			d->avoid2 = d->avoid;
 			d->avoid = 4;
 			setMap(d,m);
 			removeOld(m,c);
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mutexLock));
-			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mutexLock));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
+			pthread_mutex_unlock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]].mtx));
 		}
 	}
 	return 0;
@@ -959,9 +959,9 @@ void land(Drone *d,Map *m){
 		}
 	}
 	d->currLocation = m->base[0];
-	pthread_mutex_lock (&(m->map[m->base[0].point[0]][m->base[0].point[0]].mutexLock));
+	pthread_mutex_lock (&(m->map[m->base[0].point[0]][m->base[0].point[0]].mtx));
 	m->map[m->base[0].point[0]][m->base[0].point[0]].drone += 1;
 	m->runway[i] = 1;
-	pthread_mutex_unlock (&(m->map[m->base[0].point[0]][m->base[0].point[0]].mutexLock));
+	pthread_mutex_unlock (&(m->map[m->base[0].point[0]][m->base[0].point[0]].mtx));
 	d->state = 0;
 }

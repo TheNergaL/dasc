@@ -50,7 +50,7 @@ Map createMap(int x, int y){
 	grid.item = ' ';
 	grid.locked = 0;
 	grid.dest = 0;
-	pthread_mutex_init(&(grid.mutexLock), NULL);
+	pthread_mutex_init(&(grid.mtx), NULL);
 
 	// Initiate grid to each box on the map
 	for(i = -25;i <= 25;i++){
@@ -69,7 +69,7 @@ Map createMap(int x, int y){
 
 	return m;
 }
-
+// prints borders of map
 void printMap(Map *m){
 	int i,j;
 	printf("-----------------------------------------------------\n");
@@ -90,9 +90,9 @@ Drone* orderDrone(Map *m,int id){
 	d->id = id;
 	d->currLocation.point[0] = m->base[0].point[0];
 	d->currLocation.point[1] = m->base[0].point[1];
-	pthread_mutex_lock (&(m->map[m->base[0].point[0]][m->base[0].point[0]].mutexLock));
+	pthread_mutex_lock (&(m->map[m->base[0].point[0]][m->base[0].point[0]].mtx));
 	m->map[m->base[0].point[0]][m->base[0].point[0]].drone += 1;
-	pthread_mutex_unlock (&(m->map[m->base[0].point[0]][m->base[0].point[0]].mutexLock));
+	pthread_mutex_unlock (&(m->map[m->base[0].point[0]][m->base[0].point[0]].mtx));
 	d->state =  0;
 	d->speed = 0;
 	d->delivered = 0;
@@ -113,21 +113,15 @@ void assignJob(Drone *d,Map *m){
 		}while((x == 0 && y == 0) || (x == 0 && y == 1) || (x == 0 && y == -1) || (x == 1 && y == 0) || (x == -1 && y == 0) || (m->map[x][y].locked == 1));
 		d->destLocation.point[0] = x;
 		d->destLocation.point[1] = y;
-		pthread_mutex_lock (&(m->map[x][y].mutexLock));
+		pthread_mutex_lock (&(m->map[x][y].mtx));
 		m->map[x][y].dest = 1;
 		m->map[x][y].item = 'X';
 		m->map[x][y].locked = 0;
-		pthread_mutex_unlock (&(m->map[x][y].mutexLock));
+		pthread_mutex_unlock (&(m->map[x][y].mtx));
 		d->state += 1;
 }
 
-// void assignJob(Drone *d,Map *m, int x, int y){
-	// d->destLocation.point[0] = x;
-	// d->destLocation.point[1] = y;
-	// d->state = 1;
-	// m->map[x][y].dest = 1;
-	// m->map[x][y].item = 'X';
-// }
+
 
 void getPackage(Drone *d){
 	d->state = 2;
@@ -138,9 +132,9 @@ void getPackage(Drone *d){
 
 void returnHome(Drone* d,Map *m){
 	d->state = 6;
-	pthread_mutex_lock (&(m->map[d->destLocation.point[0]][d->destLocation.point[1]].mutexLock));
+	pthread_mutex_lock (&(m->map[d->destLocation.point[0]][d->destLocation.point[1]].mtx));
 	m->map[d->destLocation.point[0]][d->destLocation.point[1]].dest = 0;
-	pthread_mutex_unlock (&(m->map[d->destLocation.point[0]][d->destLocation.point[1]].mutexLock));
+	pthread_mutex_unlock (&(m->map[d->destLocation.point[0]][d->destLocation.point[1]].mtx));
 	d->destLocation.point[0] = m->base[0].point[0];
 	d->destLocation.point[1] = m->base[0].point[1];
 	d->state += 1;
@@ -153,10 +147,10 @@ int requestTakeoff(Drone *d,Map *m){
 	while (1==1){
 		for(i = 0;i < 4;i++){
 			if(m->runway[i] == 1){
-				pthread_mutex_lock (&(m->map[m->base[i+1].point[0]][m->base[i+1].point[0]].mutexLock));
+				pthread_mutex_lock (&(m->map[m->base[i+1].point[0]][m->base[i+1].point[0]].mtx));
 				m->map[m->base[0].point[0]][m->base[0].point[0]].drone -= 1;
 				m->runway[i] = 0;
-				pthread_mutex_unlock (&(m->map[m->base[i+1].point[0]][m->base[i+1].point[0]].mutexLock));
+				pthread_mutex_unlock (&(m->map[m->base[i+1].point[0]][m->base[i+1].point[0]].mtx));
 				d->currLocation = m->base[i+1];
 				d->state += 1;
 				return 1;
@@ -191,7 +185,7 @@ void createBuilding(Map *m,int count){
 				y = (rand()%51) - 25;
 			}while((x == 0 && y == 0) || (x == 0 && y == 1) || (x == 0 && y == -1) || (x == 1 && y == 0) || (x == -1 && y == 0) || (m->map[x][y].item == '+'));
 			m->map[x][y].locked = 1;
-			m->map[x][y].item = '+';
+			m->map[x][y].item = '?';
 		}
 }
 
