@@ -5,12 +5,15 @@
 
 #define SIZE 51
 
+// header of structs to make position tracking and boolean flagging easier
+
 typedef struct Coord{
-	int point[2];   //[0] == x && [1] == y
-} Coord;
+    // binary system where 0 = x 1 = y
+	int point[2];  
+} Coordiante;
 
 typedef struct Box{
-	Coord coord;    						//Box's coordinate
+	Coordinate coord;    						//Box's coordinate
 	int drone;      						//Number of Drones, mainly for base count
 	int id;         						//Drone id
 	int dest;								//Cood is a destination
@@ -21,13 +24,13 @@ typedef struct Box{
 
 typedef struct Drone{
 	int id;         						//Drones id
-	Coord currLocation,destLocation;        //Current and destination location
+	Coordinate currLocation,destLocation;        //Current and destination location
 	int state;      						//State drone is in
 	int speed;      						//Speed the drone moves
 	int delivered;  						//Is package delivered?
 	int package;    						//Does drone have a package?
 	int avoid;								//Direction it moved from
-	int avoid2;								//Direction it moved two steps ago
+	int doubly_avoid;								//Direction it moved two steps ago
 	int move;								//Avoid repeats
 } Drone;
 

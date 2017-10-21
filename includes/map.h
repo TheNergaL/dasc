@@ -3,7 +3,11 @@
 
 #include "struct.h"
 
+//all stubs defined in src/map.c
+
 //Generate default map with x,y coord as base
+
+
 Map createMap(int x, int y);
 //Printes out map
 void printMap(Map *m);
@@ -16,7 +20,7 @@ void assignJob(Drone *d, Map *m);
 void getPackage(Drone *d);
 //Assign destenation to base
 void returnHome(Drone *d,Map *m);
-//Check runway for takeoff
+//Check runway for lift
 int requestTakeoff(Drone *d,Map *m);
 //Check runway to land
 int requestLand(Drone *d,Map *m);

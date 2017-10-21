@@ -4,12 +4,12 @@
 #include <stdio.h>
 #include <unistd.h>
 
-void standby(Drone *d){
+void wait(Drone *d){
 	d->state = 0;
 	d->state += 1;
 }
 
-void takeoff(Drone *d){
+void lift(Drone *d){
 	d->state = 3;
 	d->state += 1;
 }
@@ -653,7 +653,7 @@ int isLocked(Drone *d,Map *m,Coord c,Coord locked,int lock){
 
 int move(Drone *d,Map *m,int state){
 	int i;
-	//Checks if deliver or return
+	//Checks if deliverySuccessful or return
 	if(state == 1){
 		d->state = 4;
 	}
@@ -937,11 +937,11 @@ int move(Drone *d,Map *m,int state){
 	return 0;
 }
 
-void collision(Drone *d){
+void crash(Drone *d){
 	d->state = 10;
 }
 
-void deliver(Drone *d){
+void deliverySuccessful(Drone *d){
 	d->state = 5;
 	d->delivered = 1;
 	d->package = 0;
@@ -949,7 +949,7 @@ void deliver(Drone *d){
 	d->avoid = 0;
 }
 
-void land(Drone *d,Map *m){
+void comeHome(Drone *d,Map *m){
 	int i;
 	d->state = 8;
 	//Get runway number

@@ -61,7 +61,7 @@ Map createMap(int x, int y){
 			//Sets base and runway
 			for(k = 0;k<5;k++){
 				if(m.map[i][j].coord.point[0] == m.base[k].point[0] && m.map[i][j].coord.point[1] == m.base[k].point[1]){
-					m.map[i][j].item = 'x';
+					m.map[i][j].item = 'H';
 				}
 			}
 		}
@@ -189,11 +189,7 @@ void createBuilding(Map *m,int count){
 		}
 }
 
-// void createBuilding(Map *m,int x, int y){
-			// m->map[x][y].locked = 1;
-			// m->map[x][y].item = '+';
-// }
-
+// defined what the drones will do based on their current int state
 void controlTower(Drone *d,Map *m){
 	struct timespec tim, tim2;
 	tim.tv_sec = 0;
@@ -202,7 +198,7 @@ void controlTower(Drone *d,Map *m){
 	while(run == 1){
 		switch(d->state){
 			case 0:
-				standby(d);
+				wait(d);
 				break;
 			case 1:
 				assignJob(d,m);	
@@ -218,7 +214,7 @@ void controlTower(Drone *d,Map *m){
 				nanosleep(&tim,&tim2);
 				break;
 			case 5:
-				deliver(d);
+				deliverySuccessful(d);
 				break;
 			case 6:
 				returnHome(d,m);
@@ -228,7 +224,7 @@ void controlTower(Drone *d,Map *m){
 				nanosleep(&tim,&tim2);
 				break;
 			case 8:
-				land(d,m);
+				comeHome(d,m);
 				run = 0;
 				break;
 			default:
