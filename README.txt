@@ -15,4 +15,31 @@ In the bash shell, in the dasc directory, type 'gcc -std=c99 dcas.c -o dcas.exe 
 This will envoke the GNU C Compiler with the C99 standarad on your .c file, linking the pthread library for building, and create 
 and executable called dcas.exe, which can then be run.
 
-Alternatively just run the shell script I've created here.
+Alternatively just run the *nix shell script I've included here.
+
+*Note: I know the output is kinda ugly. There are 10 drones that are created sequentially at [0,0], [1,1], [2,2], ... etc
+
+The drones are represented by their pthread numbers, 0, 1, 2....
+
+Upon instantiation, each drone is assigned a package to pick up arbitrarily. These are represented by the apex of the drone's flight path (the position
+where the drone turns around to come back home.) 
+
+There are also obstacles for the to avoid drone printed about the map, represented by char 'X'
+
+The drones will navigate to their respective packages avoiding obstacles and other drones along the way. Before each movement, the drone looks ahead
+to it's next X and Y coordinate moves to ensure there are no obstacles or other drones in the way. If there are, it searches for the nearest clear path to take 
+to it's package. If there are none, it will hover in place until a path opens.
+
+
+Each drone has a trail of 'arrows' showing it's movement path. If drones avoid an obstacle or another drone, their 'ghosts' are left in place.
+
+Example: Drone #5 is coming home and avoids an obstacle X will look like this: 
+
+5<<<<X5<<<<
+    ^<<
+
+
+This represents the 5 drone coming back, finding the obstacle, and avoiding it by going under. Drones avoiding other drones however will just look like a mish
+mash of numbers which is hard to make sense of. You can check that all drones succesfully obtained their packages and returned home without crashing 
+by seeing that they've all returned back to their starting positions.
+
