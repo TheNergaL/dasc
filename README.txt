@@ -1,5 +1,5 @@
-CSE321 Lab 1 DASC.c 
-----------------------------   
+CSE321 Lab 1 DASC.c Tucker Polomik 
+------------------------------------------------------   
 Lab work done for CSE321 Realtime and Embedded Systems
 Language : C
 Dependencies : C99/GNU99 (for -lpthread)
