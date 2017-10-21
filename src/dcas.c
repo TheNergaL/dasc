@@ -42,12 +42,17 @@ int main (int argc, char **argv)
   long t; //Loop Counter
   for(t=0;t<NUM_DRONES;t++) {
 
+
+    // TODO: add packages to be arbitrary
+    int r1 = rand() % LENGTH;
+    int r2 = rand() % LENGTH - r1; //guarantee 2nd random won't be same as first
     thread_data_array[t].thread_id = t;
     thread_data_array[t].airport_x = t;
     thread_data_array[t].airport_y = t;
-    thread_data_array[t].package_x = t+10;
-    thread_data_array[t].package_y = t+10;
-
+    if (r1 != r2) {
+    thread_data_array[t].package_x = t+r1;
+    thread_data_array[t].package_y = t+r2;
+    }
     retVal = pthread_create(&threads[t], NULL, fly, (void *) &thread_data_array[t]);
     if (retVal) {
       printf("ERROR: return code from pthread_create() is %d\n", retVal);
