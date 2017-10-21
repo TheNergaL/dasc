@@ -18,12 +18,12 @@ void *fly(void *arg0);
 void placeObstacles();
 void avoid(int*, int*, char, int);
 
-struct thread_data{
+struct threadData{
   int thread_id;
   int airport_x,airport_y;
   int package_x,package_y;
 };
-struct thread_data thread_data_array[NUM_DRONES];
+struct threadData thread_data_array[NUM_DRONES];
 
 struct obstacles{
     int obs_x;
@@ -43,9 +43,10 @@ int main (int argc, char **argv)
   for(t=0;t<NUM_DRONES;t++) {
 
 
-    // TODO: add packages to be arbitrary
+    //drones all start at [1,1], [2,2], [3,3] ... [n,n]
+    //all packages are located at arbitrary locations through the airspace
     int r1 = rand() % MAP_SIZE;
-    int r2 = rand() % MAP_SIZE; //guarantee 2nd random won't be same as first
+    int r2 = rand() % MAP_SIZE; 
     thread_data_array[t].thread_id = t;
     thread_data_array[t].airport_x = t;
     thread_data_array[t].airport_y = t;
@@ -61,34 +62,34 @@ int main (int argc, char **argv)
   pthread_exit(NULL);
 }
 
-void avoid(int* cx, int* cy, char direction, int taskid){
+void avoid(int* currPosX, int* currPosY, char nextMove, int taskID){
     
-    if(direction == '>'){
-            airspace[(*cx)++][(*cy)] = taskid;//down
-            airspace[(*cx)][(*cy)++] = taskid;//right
-            airspace[(*cx)][(*cy)++] = taskid;//right
-            airspace[(*cx)--][(*cy)] = taskid;//up
+    if(nextMove == '>'){
+            airspace[(*currPosX)++][(*currPosY)] = taskID;//down
+            airspace[(*currPosX)][(*currPosY)++] = taskID;//right
+            airspace[(*currPosX)][(*currPosY)++] = taskID;//right
+            airspace[(*currPosX)--][(*currPosY)] = taskID;//up
              
     }
-    if(direction == 'V'){
-            airspace[(*cx)][(*cy)--] = taskid;//left
-            airspace[(*cx)++][(*cy)] = taskid;//down
-            airspace[(*cx)++][(*cy)] = taskid;//down
-            airspace[(*cx)][(*cy)++] = taskid;//right
+    if(nextMove == 'V'){
+            airspace[(*currPosX)][(*currPosY)--] = taskID;//left
+            airspace[(*currPosX)++][(*currPosY)] = taskID;//down
+            airspace[(*currPosX)++][(*currPosY)] = taskID;//down
+            airspace[(*currPosX)][(*currPosY)++] = taskID;//right
         
     }
-    if(direction == '^'){
-            airspace[(*cx)][(*cy)--] = taskid;//left
-            airspace[(*cx)--][(*cy)] = taskid;//up
-            airspace[(*cx)--][(*cy)] = taskid;//up
-            airspace[(*cx)][(*cy)++] = taskid;//right
+    if(nextMove == '^'){
+            airspace[(*currPosX)][(*currPosY)--] = taskID;//left
+            airspace[(*currPosX)--][(*currPosY)] = taskID;//up
+            airspace[(*currPosX)--][(*currPosY)] = taskID;//up
+            airspace[(*currPosX)][(*currPosY)++] = taskID;//right
         
     }
-    if(direction == '<'){
-            airspace[(*cx)++][(*cy)] = taskid;//down
-            airspace[(*cx)][(*cy)--] = taskid;//left
-            airspace[(*cx)][(*cy)--] = taskid;//left
-            airspace[(*cx)--][(*cy)] = taskid;//up
+    if(nextMove == '<'){
+            airspace[(*currPosX)++][(*currPosY)] = taskID;//down
+            airspace[(*currPosX)][(*currPosY)--] = taskID;//left
+            airspace[(*currPosX)][(*currPosY)--] = taskID;//left
+            airspace[(*currPosX)--][(*currPosY)] = taskID;//up
         
     }
 }
@@ -113,81 +114,81 @@ void placeObstacles(){
 }
 
 void *fly(void *arg0){
-  int taskid;
+  int taskID;
   int home_x, home_y;
   int pack_x, pack_y;
-  struct thread_data *data;
+  struct threadData *data;
 
-  data = (struct thread_data *) arg0;
-  taskid = data->thread_id;
-  // taskid += 48 ;
+  data = (struct threadData *) arg0;
+  taskID = data->thread_id;
+  taskID += 48 ; //ASCII 0 = 'drone' #1, ASCII 1 (49) = 'drone' #2,  etc
   home_x = data->airport_x;
   home_y = data->airport_y;
   pack_x = data->package_x;
   pack_y = data->package_y;
   
-  airspace[home_x][home_y] = taskid;
+  airspace[home_x][home_y] = taskID;
   printMap();
   
   int curr_x = home_x;
   int curr_y = home_y;
   
-  char direction = '>';
+  char nextMove = '>';
   for(;curr_y < pack_y; curr_y++ ){
       if(airspace[curr_x][curr_y+1] == 'X' || airspace[curr_x][curr_y+1] == '1' || airspace[curr_x][curr_y+1] == '2' 
       || airspace[curr_x][curr_y+1] == '3' || airspace[curr_x][curr_y+1] == '4' || airspace[curr_x][curr_y+1] == '5'
       || airspace[curr_x][curr_y+1] == '6' || airspace[curr_x][curr_y+1] == '7' || airspace[curr_x][curr_y+1] == '8'
       || airspace[curr_x][curr_y+1] == '9' || airspace[curr_x][curr_y+1] == '0'){
-        avoid(&curr_x,&curr_y, direction, taskid);
+        avoid(&curr_x,&curr_y, nextMove, taskID);
       }
-      airspace[curr_x][curr_y+1] = taskid;
-      airspace[curr_x][curr_y] = direction;
+      airspace[curr_x][curr_y+1] = taskID;
+      airspace[curr_x][curr_y] = nextMove;
       printMap();
       
       usleep(sleep_2);
       
   }
   
-  direction = 'V';
+  nextMove = 'V';
   for(;curr_x < pack_x; curr_x++ ){
       if(airspace[curr_x+1][curr_y] == 'X' || airspace[curr_x+1][curr_y] == '1' || airspace[curr_x+1][curr_y] == '2'
       || airspace[curr_x+1][curr_y] == '3' || airspace[curr_x+1][curr_y] == '4' || airspace[curr_x+1][curr_y] == '5'
       || airspace[curr_x+1][curr_y] == '6' || airspace[curr_x+1][curr_y] == '7' || airspace[curr_x+1][curr_y] == '8'
       || airspace[curr_x+1][curr_y] == '9' || airspace[curr_x+1][curr_y] == '0'){
-        avoid(&curr_x,&curr_y, direction, taskid);
+        avoid(&curr_x,&curr_y, nextMove, taskID);
       }
-      airspace[curr_x+1][curr_y] = taskid;
-      airspace[curr_x][curr_y] = direction;
+      airspace[curr_x+1][curr_y] = taskID;
+      airspace[curr_x][curr_y] = nextMove;
       printMap();
       usleep(sleep_2);
       
   }
   
-  direction = '^';
+  nextMove = '^';
   for(;curr_x > home_x; curr_x-- ){ 
       if(airspace[curr_x-1][curr_y] =='X' || airspace[curr_x-1][curr_y] =='1' || airspace[curr_x-1][curr_y] =='2' 
       || airspace[curr_x-1][curr_y] =='3' || airspace[curr_x-1][curr_y] =='4' || airspace[curr_x-1][curr_y] =='5' 
       || airspace[curr_x-1][curr_y] =='6' || airspace[curr_x-1][curr_y] =='7' || airspace[curr_x-1][curr_y] =='8'
       || airspace[curr_x-1][curr_y] =='9' || airspace[curr_x-1][curr_y] =='0' ){
-        avoid(&curr_x,&curr_y, direction, taskid);
+        avoid(&curr_x,&curr_y, nextMove, taskID);
       }
-      airspace[curr_x-1][curr_y] = taskid;
-      airspace[curr_x][curr_y] = direction;
+      airspace[curr_x-1][curr_y] = taskID;
+      airspace[curr_x][curr_y] = nextMove;
       printMap();
       usleep(sleep_2);
       
   }
   
-  direction = '<';
+  nextMove = '<';
   for(;curr_y > home_y; curr_y-- ){
       if(airspace[curr_x][curr_y-1] == 'X' || airspace[curr_x][curr_y-1] == '1' || airspace[curr_x][curr_y-1] == '2'
       || airspace[curr_x][curr_y-1] == '3' || airspace[curr_x][curr_y-1] == '4'|| airspace[curr_x][curr_y-1] == '5'
       || airspace[curr_x][curr_y-1] == '6' || airspace[curr_x][curr_y-1] == '7'|| airspace[curr_x][curr_y-1] == '8'
       || airspace[curr_x][curr_y-1] == '9' || airspace[curr_x][curr_y-1] == '0'){
-        avoid(&curr_x,&curr_y, direction, taskid);
+        avoid(&curr_x,&curr_y, nextMove, taskID);
       }
-      airspace[curr_x][curr_y-1] = taskid;
-      airspace[curr_x][curr_y] = direction;
+      airspace[curr_x][curr_y-1] = taskID;
+      airspace[curr_x][curr_y] = nextMove;
       printMap();
       usleep(sleep_2);
       
