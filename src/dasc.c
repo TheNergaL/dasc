@@ -29,7 +29,7 @@ Drone d1, d2, d3, d4, d5, d6, d7, d8, d9, d10;
    Check airspace around drone for collisions
 */
 
-bool checkClearAirspace(int& x, int& y) {
+bool checkClearAirspace(int x, int y) {
    if ((x < 50 || x > 1) && (y < 50 || y > 1)
       && airspace[x][y] !='!' && airspace[x][y]!='&'
       && airspace[x][y]!='+') {
@@ -45,7 +45,7 @@ int main() {
     void* status;
     pthread_attr_t attr;
 
-    pthread_mutex_init(&count_mtx, NULL);
+    pthread_mutex_init(&mtx, NULL);
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 
@@ -54,5 +54,3 @@ int main() {
     }
 
     }
-
-}
