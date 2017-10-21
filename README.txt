@@ -43,3 +43,4 @@ This represents the 5 drone coming back, finding the obstacle, and avoiding it b
 mash of numbers which is hard to make sense of. You can check that all drones succesfully obtained their packages and returned home without crashing 
 by seeing that they've all returned back to their starting positions.
 
+Output best viewed in a full-screen terminal window.
