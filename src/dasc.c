@@ -19,7 +19,17 @@ typedef struct {
 
 char airspace[50][50];
 
-Drone d1, d2, d3, d4, d5, d6, d7, d8, d9, d10;
+Drone d0, d1, d2, d3, d4, d5, d6, d7, d8, d9;
+Drone drone_arr[10] = {d0, d1, d2, d3, d4, d5, d6, d7, d8, d9};
+/*
+    prints airspace matrix for each drone mvmnt
+    'A' represents airport - starting position
+    'D' represents destination
+*/
+void outputAirspace() {
+    int i, j;
+    airspace[drone.]
+}
 
 /* 
    checkClearAirspace 
