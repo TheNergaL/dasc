@@ -5,7 +5,7 @@
 #include <time.h>
 
 #define NUM_DRONES 10 
-#define NUM_OBSTACLES 2 
+#define NUM_OBSTACLES 10 
 #define LENGTH 50
 
 int sleep_time = 200000;
@@ -14,20 +14,20 @@ char grid[LENGTH][LENGTH];
 
 void create_grid();
 void print_grid();
-void *move_drone(void *threadarg);
+void *fly(void *threadarg);
 void placeObstacles();
 void avoid(int*, int*, char, int);
 
 struct thread_data{
   int thread_id;
-  int sx,sy;
-  int dx,dy;
+  int airport_x,airport_y;
+  int package_x,package_y;
 };
 struct thread_data thread_data_array[NUM_DRONES];
 
 struct obstacles{
-    int x;
-    int y;
+    int obs_x;
+    int obs_y;
 };
 struct obstacles obstacle_array[NUM_OBSTACLES];
 
@@ -38,20 +38,19 @@ int main (int argc, char **argv)
   
   pthread_t threads[NUM_DRONES]; //Thread Address
   //int *taskids[NUM_DRONES];
-  int rc; //Holds thread return code
+  int retVal; //Holds thread return code
   long t; //Loop Counter
   for(t=0;t<NUM_DRONES;t++) {
 
     thread_data_array[t].thread_id = t;
-    thread_data_array[t].sx = t;
-    thread_data_array[t].sy = t;
-    thread_data_array[t].dx = t+10;
-    thread_data_array[t].dy = t+10;
+    thread_data_array[t].airport_x = t;
+    thread_data_array[t].airport_y = t;
+    thread_data_array[t].package_x = t+10;
+    thread_data_array[t].package_y = t+10;
 
-    rc = pthread_create(&threads[t], NULL, move_drone, (void *) 
-			&thread_data_array[t]);
-    if (rc) {
-      printf("ERROR: return code from pthread_create() is %d\n", rc);
+    retVal = pthread_create(&threads[t], NULL, fly, (void *) &thread_data_array[t]);
+    if (retVal) {
+      printf("ERROR: return code from pthread_create() is %d\n", retVal);
       exit(-1);
     }
   }
@@ -92,20 +91,20 @@ void avoid(int* cx, int* cy, char direction, int taskid){
 
 // define x, y positions of obstacles and places them on the grid
 void placeObstacles(){
-    obstacle_array[0].x = 0;
-    obstacle_array[0].y = 5;
-    obstacle_array[1].x = 5;
-    obstacle_array[1].y = 10;
+    obstacle_array[0].obs_x = 0;
+    obstacle_array[0].obs_y = 5;
+    obstacle_array[1].obs_x = 5;
+    obstacle_array[1].obs_y = 10;
     
     for(int i = 0; i < NUM_OBSTACLES; i++){
-        int x = obstacle_array[i].x;
-        int y = obstacle_array[i].y;
+        int x = obstacle_array[i].obs_x;
+        int y = obstacle_array[i].obs_y;
         
         grid[x][y]= 'X';
     }
 }
 
-void *move_drone(void *threadarg){
+void *fly(void *threadarg){
   int taskid;
   int start_x, start_y;
   int dest_x, dest_y;
@@ -114,10 +113,10 @@ void *move_drone(void *threadarg){
   my_data = (struct thread_data *) threadarg;
   taskid = my_data->thread_id;
   taskid += 48 ;
-  start_x = my_data->sx;
-  start_y = my_data->sy;
-  dest_x = my_data->dx;
-  dest_y = my_data->dy;
+  start_x = my_data->airport_x;
+  start_y = my_data->airport_y;
+  dest_x = my_data->package_x;
+  dest_y = my_data->package_y;
   
   grid[start_x][start_y] = taskid;
   print_grid();
