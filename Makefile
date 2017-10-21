@@ -1,10 +1,10 @@
 CC = gcc            #the compiler
-CFLAGS = -g -Wall -std=c99  #compiler flags
+CFLAGS = -g -Wall   #compiler flags
 
 all: dcas
 
 tuckerpo_proj1: dcas.c
-	gcc dcas -o tuckerpo_proj1 -lpthread -lm  
+				gcc dcas.c -o tuckerpo_proj1 -lpthread -lm  
 
 
 clean: 	
