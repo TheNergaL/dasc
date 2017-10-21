@@ -6,15 +6,15 @@
 
 #define NUM_DRONES 10 
 #define NUM_OBSTACLES 10 
-#define LENGTH 50
+#define MAP_SIZE 50
 
-int sleep_time = 200000;
+int sleep_2 = 200000;
 
-char grid[LENGTH][LENGTH];
+char airspace[MAP_SIZE][MAP_SIZE];
 
-void create_grid();
-void print_grid();
-void *fly(void *threadarg);
+void makeMap();
+void printMap();
+void *fly(void *arg0);
 void placeObstacles();
 void avoid(int*, int*, char, int);
 
@@ -33,7 +33,7 @@ struct obstacles obstacle_array[NUM_OBSTACLES];
 
 int main (int argc, char **argv)
 {
-  create_grid();
+  makeMap();
   placeObstacles();
   
   pthread_t threads[NUM_DRONES]; //Thread Address
@@ -44,8 +44,8 @@ int main (int argc, char **argv)
 
 
     // TODO: add packages to be arbitrary
-    int r1 = rand() % LENGTH;
-    int r2 = rand() % LENGTH - r1; //guarantee 2nd random won't be same as first
+    int r1 = rand() % MAP_SIZE;
+    int r2 = rand() % MAP_SIZE - r1; //guarantee 2nd random won't be same as first
     thread_data_array[t].thread_id = t;
     thread_data_array[t].airport_x = t;
     thread_data_array[t].airport_y = t;
@@ -65,36 +65,36 @@ int main (int argc, char **argv)
 void avoid(int* cx, int* cy, char direction, int taskid){
     
     if(direction == '>'){
-            grid[(*cx)++][(*cy)] = taskid;//down
-            grid[(*cx)][(*cy)++] = taskid;//right
-            grid[(*cx)][(*cy)++] = taskid;//right
-            grid[(*cx)--][(*cy)] = taskid;//up
+            airspace[(*cx)++][(*cy)] = taskid;//down
+            airspace[(*cx)][(*cy)++] = taskid;//right
+            airspace[(*cx)][(*cy)++] = taskid;//right
+            airspace[(*cx)--][(*cy)] = taskid;//up
              
     }
     if(direction == 'V'){
-            grid[(*cx)][(*cy)--] = taskid;//left
-            grid[(*cx)++][(*cy)] = taskid;//down
-            grid[(*cx)++][(*cy)] = taskid;//down
-            grid[(*cx)][(*cy)++] = taskid;//right
+            airspace[(*cx)][(*cy)--] = taskid;//left
+            airspace[(*cx)++][(*cy)] = taskid;//down
+            airspace[(*cx)++][(*cy)] = taskid;//down
+            airspace[(*cx)][(*cy)++] = taskid;//right
         
     }
     if(direction == '^'){
-            grid[(*cx)][(*cy)--] = taskid;//left
-            grid[(*cx)--][(*cy)] = taskid;//up
-            grid[(*cx)--][(*cy)] = taskid;//up
-            grid[(*cx)][(*cy)++] = taskid;//right
+            airspace[(*cx)][(*cy)--] = taskid;//left
+            airspace[(*cx)--][(*cy)] = taskid;//up
+            airspace[(*cx)--][(*cy)] = taskid;//up
+            airspace[(*cx)][(*cy)++] = taskid;//right
         
     }
     if(direction == '<'){
-            grid[(*cx)++][(*cy)] = taskid;//down
-            grid[(*cx)][(*cy)--] = taskid;//left
-            grid[(*cx)][(*cy)--] = taskid;//left
-            grid[(*cx)--][(*cy)] = taskid;//up
+            airspace[(*cx)++][(*cy)] = taskid;//down
+            airspace[(*cx)][(*cy)--] = taskid;//left
+            airspace[(*cx)][(*cy)--] = taskid;//left
+            airspace[(*cx)--][(*cy)] = taskid;//up
         
     }
 }
 
-// define x, y positions of obstacles and places them on the grid
+// define x, y positions of obstacles and places them on the airspace
 void placeObstacles(){
     obstacle_array[0].obs_x = 0;
     obstacle_array[0].obs_y = 5;
@@ -105,104 +105,107 @@ void placeObstacles(){
         int x = obstacle_array[i].obs_x;
         int y = obstacle_array[i].obs_y;
         
-        grid[x][y]= 'X';
+        airspace[x][y]= 'X';
     }
 }
 
-void *fly(void *threadarg){
+void *fly(void *arg0){
   int taskid;
-  int start_x, start_y;
-  int dest_x, dest_y;
-  struct thread_data *my_data;
+  int home_x, home_y;
+  int pack_x, pack_y;
+  struct thread_data *data;
 
-  my_data = (struct thread_data *) threadarg;
-  taskid = my_data->thread_id;
+  data = (struct thread_data *) arg0;
+  taskid = data->thread_id;
   taskid += 48 ;
-  start_x = my_data->airport_x;
-  start_y = my_data->airport_y;
-  dest_x = my_data->package_x;
-  dest_y = my_data->package_y;
+  home_x = data->airport_x;
+  home_y = data->airport_y;
+  pack_x = data->package_x;
+  pack_y = data->package_y;
   
-  grid[start_x][start_y] = taskid;
-  print_grid();
+  airspace[home_x][home_y] = taskid;
+  printMap();
   
-  int curr_x = start_x;
-  int curr_y = start_y;
+  int curr_x = home_x;
+  int curr_y = home_y;
   
   char direction = '>';
-  for(;curr_y < dest_y; curr_y++ ){
-      if(grid[curr_x][curr_y+1] == 'X' || grid[curr_x][curr_y+1] == '1' || grid[curr_x][curr_y+1] == '2' 
-      || grid[curr_x][curr_y+1] == '3' || grid[curr_x][curr_y+1] == '4' || grid[curr_x][curr_y+1] == '5'
-      || grid[curr_x][curr_y+1] == '6' || grid[curr_x][curr_y+1] == '7' || grid[curr_x][curr_y+1] == '8'
-      || grid[curr_x][curr_y+1] == '9' || grid[curr_x][curr_y+1] == '0'){
+  for(;curr_y < pack_y; curr_y++ ){
+      if(airspace[curr_x][curr_y+1] == 'X' || airspace[curr_x][curr_y+1] == '1' || airspace[curr_x][curr_y+1] == '2' 
+      || airspace[curr_x][curr_y+1] == '3' || airspace[curr_x][curr_y+1] == '4' || airspace[curr_x][curr_y+1] == '5'
+      || airspace[curr_x][curr_y+1] == '6' || airspace[curr_x][curr_y+1] == '7' || airspace[curr_x][curr_y+1] == '8'
+      || airspace[curr_x][curr_y+1] == '9' || airspace[curr_x][curr_y+1] == '0'){
         avoid(&curr_x,&curr_y, direction, taskid);
       }
-      grid[curr_x][curr_y+1] = taskid;
-      grid[curr_x][curr_y] = direction;
-      print_grid();
+      airspace[curr_x][curr_y+1] = taskid;
+      airspace[curr_x][curr_y] = direction;
+      printMap();
       
-      usleep(sleep_time);
+      usleep(sleep_2);
       
   }
   
   direction = 'V';
-  for(;curr_x < dest_x; curr_x++ ){
-      if(grid[curr_x+1][curr_y] == 'X' || grid[curr_x+1][curr_y] == '1' || grid[curr_x+1][curr_y] == '2'
-      || grid[curr_x+1][curr_y] == '3' || grid[curr_x+1][curr_y] == '4' || grid[curr_x+1][curr_y] == '5'
-      || grid[curr_x+1][curr_y] == '6' || grid[curr_x+1][curr_y] == '7' || grid[curr_x+1][curr_y] == '8'
-      || grid[curr_x+1][curr_y] == '9' || grid[curr_x+1][curr_y] == '0'){
+  for(;curr_x < pack_x; curr_x++ ){
+      if(airspace[curr_x+1][curr_y] == 'X' || airspace[curr_x+1][curr_y] == '1' || airspace[curr_x+1][curr_y] == '2'
+      || airspace[curr_x+1][curr_y] == '3' || airspace[curr_x+1][curr_y] == '4' || airspace[curr_x+1][curr_y] == '5'
+      || airspace[curr_x+1][curr_y] == '6' || airspace[curr_x+1][curr_y] == '7' || airspace[curr_x+1][curr_y] == '8'
+      || airspace[curr_x+1][curr_y] == '9' || airspace[curr_x+1][curr_y] == '0'){
         avoid(&curr_x,&curr_y, direction, taskid);
       }
-      grid[curr_x+1][curr_y] = taskid;
-      grid[curr_x][curr_y] = direction;
-      print_grid();
-      usleep(sleep_time);
+      airspace[curr_x+1][curr_y] = taskid;
+      airspace[curr_x][curr_y] = direction;
+      printMap();
+      usleep(sleep_2);
       
   }
   
   direction = '^';
-  for(;curr_x > start_x; curr_x-- ){ 
-      if(grid[curr_x-1][curr_y] =='X' || grid[curr_x-1][curr_y] =='1' || grid[curr_x-1][curr_y] =='2' 
-      || grid[curr_x-1][curr_y] =='3' || grid[curr_x-1][curr_y] =='4' || grid[curr_x-1][curr_y] =='5' 
-      || grid[curr_x-1][curr_y] =='6' || grid[curr_x-1][curr_y] =='7' || grid[curr_x-1][curr_y] =='8'
-      || grid[curr_x-1][curr_y] =='9' || grid[curr_x-1][curr_y] =='0' ){
+  for(;curr_x > home_x; curr_x-- ){ 
+      if(airspace[curr_x-1][curr_y] =='X' || airspace[curr_x-1][curr_y] =='1' || airspace[curr_x-1][curr_y] =='2' 
+      || airspace[curr_x-1][curr_y] =='3' || airspace[curr_x-1][curr_y] =='4' || airspace[curr_x-1][curr_y] =='5' 
+      || airspace[curr_x-1][curr_y] =='6' || airspace[curr_x-1][curr_y] =='7' || airspace[curr_x-1][curr_y] =='8'
+      || airspace[curr_x-1][curr_y] =='9' || airspace[curr_x-1][curr_y] =='0' ){
         avoid(&curr_x,&curr_y, direction, taskid);
       }
-      grid[curr_x-1][curr_y] = taskid;
-      grid[curr_x][curr_y] = direction;
-      print_grid();
-      usleep(sleep_time);
+      airspace[curr_x-1][curr_y] = taskid;
+      airspace[curr_x][curr_y] = direction;
+      printMap();
+      usleep(sleep_2);
       
   }
   
   direction = '<';
-  for(;curr_y > start_y; curr_y-- ){
-      if(grid[curr_x][curr_y-1] == 'X'){
+  for(;curr_y > home_y; curr_y-- ){
+      if(airspace[curr_x][curr_y-1] == 'X' || airspace[curr_x][curr_y-1] == '1' || airspace[curr_x][curr_y-1] == '2'
+      || airspace[curr_x][curr_y-1] == '3' || airspace[curr_x][curr_y-1] == '4'|| airspace[curr_x][curr_y-1] == '5'
+      || airspace[curr_x][curr_y-1] == '6' || airspace[curr_x][curr_y-1] == '7'|| airspace[curr_x][curr_y-1] == '8'
+      || airspace[curr_x][curr_y-1] == '9' || airspace[curr_x][curr_y-1] == '0'){
         avoid(&curr_x,&curr_y, direction, taskid);
       }
-      grid[curr_x][curr_y-1] = taskid;
-      grid[curr_x][curr_y] = direction;
-      print_grid();
-      usleep(sleep_time);
+      airspace[curr_x][curr_y-1] = taskid;
+      airspace[curr_x][curr_y] = direction;
+      printMap();
+      usleep(sleep_2);
       
   }
   pthread_exit(NULL);
 }
 
-void print_grid(){
-	for(int i = 0; i < LENGTH; i++){
-		for (int j = 0; j < LENGTH; j++){
-			printf("%c", grid[i][j]);
+void printMap(){
+	for(int i = 0; i < MAP_SIZE; i++){
+		for (int j = 0; j < MAP_SIZE; j++){
+			printf("%c", airspace[i][j]);
 		}
 		printf("\n");
 	}
 	return;
 }
 
-void create_grid(){
-    for (int i = 0; i < LENGTH; i++){
-		for (int j = 0; j < LENGTH; j++){
-			grid[i][j] = '.';
+void makeMap(){
+    for (int i = 0; i < MAP_SIZE; i++){
+		for (int j = 0; j < MAP_SIZE; j++){
+			airspace[i][j] = '.';
 		}
 	}
 
