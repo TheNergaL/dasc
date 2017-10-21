@@ -20,7 +20,7 @@ typedef struct {
 char airspace[50][50];
 
 Drone d0, d1, d2, d3, d4, d5, d6, d7, d8, d9;
-Drone drone_arr[10] = {d0, d1, d2, d3, d4, d5, d6, d7, d8, d9};
+// Drone drone_arr[10] = {d0, d1, d2, d3, d4, d5, d6, d7, d8, d9};
 /*
     prints char airspace matrix for each drone mvmnt
     'A' represents airport - starting position
@@ -457,7 +457,7 @@ void avoidCollision(int i, int j, int x, int y){
 					sleep(1);
 					pthread_mutex_lock(&mtx);
 					airspace[i][j-1]=' ';
-					pthread_mutex_unlock(&mtx);
+                    pthread_mutex_unlock(&mtx);
 					j--;	
 
 				}else{
