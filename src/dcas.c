@@ -93,8 +93,8 @@ void go_around(int* cx, int* cy, char direction, int taskid){
 void set_obstacles(){
     obstacle_array[0].x = 0;
     obstacle_array[0].y = 5;
-    obstacle_array[1].x = 10;
-    obstacle_array[2].x = 20;
+    obstacle_array[1].x = 0;
+    obstacle_array[2].x = 7;
     
     for(int i = 0; i < NUM_OBSTACLES; i++){
         int x = obstacle_array[i].x;
