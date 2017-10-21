@@ -1,27 +1,58 @@
 #include <stdio.h>
-#include <stddef.h>
-#include <pthread.h>
 #include <stdlib.h>
+#include <pthread.h>
+#include <stdbool.h>
+#define NUM_DRONES 10
+
+
+pthread_mutex_t mtx;
+
 
 typedef struct {
-	size_t id, thread;
-} drone;
+   int airport_x;
+   int airport_y;
+   int change_x;
+   int change_y;
+   char symbol;
+   bool state;
+} Drone;
 
-typedef struct {
-	int[]  airspace[ n ] [ m ] ;
-} air;
+char airspace[50][50];
 
-void main(int argc, char* argv[]) {
-	int count;
-	pthread_t *dthreads; 
-	if (argc == 0) { printf("Enter: %s n\n where n is the number of drones to place in the air. ", argv[0]); exit(1); }
-	int num_drones = atoi(argv[1]); 	
-	if (num_drones < 1 || num_drones > sizeof(int)) { printf("You must test at least one drone. ", argv[0]); exit(1); }
-  	air *as = (air *)malloc(sizeof(air)*num_drones);
-	dthreads=(pthread_t *)malloc(num_drones*sizeof(*dthreads));
-	for (size_t i = 0; i < num_drones; i++) {
-		as[count].n = count;
-		as[count].m = count;
-		pthread_create(&dtheads[count],NULL,... , ...);	
-		  
- }
+Drone d1, d2, d3, d4, d5, d6, d7, d8, d9, d10;
+
+/* 
+   checkClearAirspace 
+   @return type bool
+   @param int reference x -> x grid location
+   @param int reference y -> y grid location
+   Check airspace around drone for collisions
+*/
+
+bool checkClearAirspace(int& x, int& y) {
+   if ((x < 50 || x > 1) && (y < 50 || y > 1)
+      && airspace[x][y] !='!' && airspace[x][y]!='&'
+      && airspace[x][y]!='+') {
+      return true;
+   }
+   return false;
+}
+
+int main() {
+    pthread_t threads[NUM_DRONES];
+    int i, j;
+
+    void* status;
+    pthread_attr_t attr;
+
+    pthread_mutex_init(&count_mtx, NULL);
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
+
+    for (i = 0; i < NUM_DRONES; i++) {
+        pthread_create(&threads[i],NULL,printDroneMap,(void *)t);
+    }
+
+    }
+
+}
