@@ -55,12 +55,12 @@ Map createMap(int x, int y){
 	// Initiate grid to each box on the map
 	for(i = -25;i <= 25;i++){
 		for(j = -25;j <= 25;j++){
-			grid.Coordinate.point[0] = i;
-			grid.Coordinate.point[1] = j;
+			grid.coord.point[0] = i;
+			grid.coord.point[1] = j;
 			m.map[i][j] = grid;
 			//Sets base and runway
 			for(k = 0;k<5;k++){
-				if(m.map[i][j].Coordinate.point[0] == m.base[k].point[0] && m.map[i][j].Coordinate.point[1] == m.base[k].point[1]){
+				if(m.map[i][j].coord.point[0] == m.base[k].point[0] && m.map[i][j].coord.point[1] == m.base[k].point[1]){
 					m.map[i][j].item = 'H';
 				}
 			}
