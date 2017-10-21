@@ -651,85 +651,85 @@ void fillMap(int a, int b, int x, int y){
 }
 
 void *printDroneX(void *threadid){
-	d0.hx=25;
-	d0.hy=25;
-	d0.dx=9;
-	d0.dy=9;
-	d1.hx=25;
-	d1.hy=25;
-	d1.dx=9;
-	d1.dy=9;
-	d2.hx=25;
-	d2.hy=25;
-	d2.dx=39;
-	d2.dy=39;
-	d3.hx=25;
-	d3.hy=25;
-	d3.dx=39;
-	d3.dy=39;
-	d4.hx=25;
-	d4.hy=25;
-	d4.dx=9;
-	d4.dy=39;
-	d5.hx=25;
-	d5.hy=25;
-	d5.dx=9;
-	d5.dy=39;
-	d6.hx=25;
-	d6.hy=25;
-	d6.dx=39;
-	d6.dy=39;
-	d7.hx=25;
-	d7.hy=25;
-	d7.dx=39;
-	d7.dy=9;
-	d8.hx=25;
-	d8.hy=25;
-	d8.dx=39;
-	d8.dy=9;
-	d9.hx=25;
-	d9.hy=25;
-	d9.dx=39;
-	d9.dy=9;
+	d0.airport_x=25;
+	d0.airport_y=25;
+	d0.change_x=9;
+	d0.change_y=9;
+	d1.airport_x=25;
+	d1.airport_y=25;
+	d1.change_x=9;
+	d1.change_y=9;
+	d2.airport_x=25;
+	d2.airport_y=25;
+	d2.change_x=39;
+	d2.change_y=39;
+	d3.airport_x=25;
+	d3.airport_y=25;
+	d3.change_x=39;
+	d3.change_y=39;
+	d4.airport_x=25;
+	d4.airport_y=25;
+	d4.change_x=9;
+	d4.change_y=39;
+	d5.airport_x=25;
+	d5.airport_y=25;
+	d5.change_x=9;
+	d5.change_y=39;
+	d6.airport_x=25;
+	d6.airport_y=25;
+	d6.change_x=39;
+	d6.change_y=39;
+	d7.airport_x=25;
+	d7.airport_y=25;
+	d7.change_x=39;
+	d7.change_y=9;
+	d8.airport_x=25;
+	d8.airport_y=25;
+	d8.change_x=39;
+	d8.change_y=9;
+	d9.airport_x=25;
+	d9.airport_y=25;
+	d9.change_x=39;
+	d9.change_y=9;
 
 
 	long tid;
 	tid = (long)threadid;
 	if(tid==0){
-		fillMap(d0.hx, d0.hy, d0.dx, d0.dy);
+		fillMap(d0.airport_x, d0.airport_y, d0.change_x, d0.change_y);
 	}
 	if(tid==1){
-		fillMap(d1.hx, d1.hy, d1.dx, d1.dy);
+		fillMap(d1.airport_x, d1.airport_y, d1.change_x, d1.change_y);
 	}
 	if(tid==2){
-		fillMap(d2.hx, d2.hy, d2.dx, d2.dy);
+		fillMap(d2.airport_x, d2.airport_y, d2.change_x, d2.change_y);
 	}
 	if(tid==3){
-		fillMap(d3.hx, d3.hy, d3.dx, d3.dy);
+		fillMap(d3.airport_x, d3.airport_y, d3.change_x, d3.change_y);
 	}
 	if(tid==4){
-		fillMap(d4.hx, d4.hy, d4.dx, d4.dy);
+		fillMap(d4.airport_x, d4.airport_y, d4.change_x, d4.change_y);
 	}
 	if(tid==5){
-		fillMap(d5.hx, d5.hy, d5.dx, d5.dy);
+		fillMap(d5.airport_x, d5.airport_y, d5.change_x, d5.change_y);
 	}
 	if(tid==6){
-		fillMap(d6.hx, d6.hy, d6.dx, d6.dy);
+		fillMap(d6.airport_x, d6.airport_y, d6.change_x, d6.change_y);
 	}
 	if(tid==7){
-		fillMap(d7.hx, d7.hy, d7.dx, d7.dy);
+		fillMap(d7.airport_x, d7.airport_y, d7.change_x, d7.change_y);
 	}
 	if(tid==8){
-		fillMap(d8.hx, d8.hy, d8.dx, d8.dy);
+		fillMap(d8.airport_x, d8.airport_y, d8.change_x, d8.change_y);
 	}
 	if(tid==9){
-		fillMap(d9.hx, d9.hy, d9.dx, d9.dy);
+		fillMap(d9.airport_x, d9.airport_y, d9.change_x, d9.change_y);
 	}
 	pthread_exit(NULL);
 }
 
 int main() {
-    pthread_t threads[NUM_THREADS];
+    pthread_t threads[NUM_DRONES];
 	int rc;
 	long t=0;
 	long t1=1;
@@ -749,13 +749,13 @@ int main() {
 	pthread_attr_init(&attr);
 	pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 	int i;
-	for(t=0; t<NUM_THREADS;t++){
+	for(t=0; t<NUM_DRONES;t++){
 		pthread_create(&threads[t],NULL,printDroneX,(void *)t);
 		sleep(2);
 	}
 		pthread_attr_destroy(&attr);
 //		int i;
-		for(i=0;i<NUM_THREADS;i++){
+		for(i=0;i<NUM_DRONES;i++){
 			pthread_join(threads[i],&status);
 		}
 	pthread_mutex_destroy(&mtx);
