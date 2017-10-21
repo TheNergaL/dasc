@@ -757,7 +757,7 @@ int main() {
 		pthread_attr_destroy(&attr);
 //		int i;
 		for(i=0;i<NUM_DRONES;i++){
-			pthread_join(threads[i],&status);
+			pthread_join(threads[i],NULL);
 		}
 	pthread_mutex_destroy(&mtx);
 	pthread_exit(NULL);
