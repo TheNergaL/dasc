@@ -191,7 +191,7 @@ void print_grid(){
 void create_grid(){
     for (int i = 0; i < LENGTH; i++){
 		for (int j = 0; j < LENGTH; j++){
-			grid[i][j] = 178;
+			grid[i][j] = ' ';
 		}
 	}
 
