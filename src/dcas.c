@@ -100,6 +100,10 @@ void placeObstacles(){
     obstacle_array[0].obs_y = 5;
     obstacle_array[1].obs_x = 5;
     obstacle_array[1].obs_y = 10;
+    obstacle_array[2].obs_x = 5;
+    obstacle_array[2].obs_y = 15;
+    obstacle_array[3].obs_x = 8;
+    obstacle_array[3].obs_y = 14;
     
     for(int i = 0; i < NUM_OBSTACLES; i++){
         int x = obstacle_array[i].obs_x;
