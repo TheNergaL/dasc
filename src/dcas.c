@@ -120,7 +120,7 @@ void *fly(void *arg0){
 
   data = (struct thread_data *) arg0;
   taskid = data->thread_id;
-  taskid += 48 ;
+  // taskid += 48 ;
   home_x = data->airport_x;
   home_y = data->airport_y;
   pack_x = data->package_x;
