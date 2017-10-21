@@ -4,9 +4,9 @@
 #include <pthread.h>
 #include <time.h>
 
-#define NUM_THREADS 
-#define NUM_OBSTACLES 
-#define LENGTH 50
+long NUM_THREADS; 
+long NUM_OBSTACLES; 
+long LENGTH = 50;
 
 int sleep_time = 200000;
 
