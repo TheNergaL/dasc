@@ -131,7 +131,10 @@ void *fly(void *threadarg){
   
   char direction = '>';
   for(;curr_y < dest_y; curr_y++ ){
-      if(grid[curr_x][curr_y+1] == 'X'){
+      if(grid[curr_x][curr_y+1] == 'X' || grid[curr_x][curr_y+1] == '1' || grid[curr_x][curr_y+1] == '2' 
+      || grid[curr_x][curr_y+1] == '3' || grid[curr_x][curr_y+1] == '4' || grid[curr_x][curr_y+1] == '5'
+      || grid[curr_x][curr_y+1] == '6' || grid[curr_x][curr_y+1] == '7' || grid[curr_x][curr_y+1] == '8'
+      || grid[curr_x][curr_y+1] == '9' || grid[curr_x][curr_y+1] == '0'){
         avoid(&curr_x,&curr_y, direction, taskid);
       }
       grid[curr_x][curr_y+1] = taskid;
@@ -144,7 +147,10 @@ void *fly(void *threadarg){
   
   direction = 'V';
   for(;curr_x < dest_x; curr_x++ ){
-      if(grid[curr_x+1][curr_y] == 'X'){
+      if(grid[curr_x+1][curr_y] == 'X' || grid[curr_x+1][curr_y] == '1' || grid[curr_x+1][curr_y] == '2'
+      || grid[curr_x+1][curr_y] == '3' || grid[curr_x+1][curr_y] == '4' || grid[curr_x+1][curr_y] == '5'
+      || grid[curr_x+1][curr_y] == '6' || grid[curr_x+1][curr_y] == '7' || grid[curr_x+1][curr_y] == '8'
+      || grid[curr_x+1][curr_y] == '9' || grid[curr_x+1][curr_y] == '0'){
         avoid(&curr_x,&curr_y, direction, taskid);
       }
       grid[curr_x+1][curr_y] = taskid;
@@ -156,7 +162,10 @@ void *fly(void *threadarg){
   
   direction = '^';
   for(;curr_x > start_x; curr_x-- ){ 
-      if(grid[curr_x-1][curr_y] =='X'){
+      if(grid[curr_x-1][curr_y] =='X' || grid[curr_x-1][curr_y] =='1' || grid[curr_x-1][curr_y] =='2' 
+      || grid[curr_x-1][curr_y] =='3' || grid[curr_x-1][curr_y] =='4' || grid[curr_x-1][curr_y] =='5' 
+      || grid[curr_x-1][curr_y] =='6' || grid[curr_x-1][curr_y] =='7' || grid[curr_x-1][curr_y] =='8'
+      || grid[curr_x-1][curr_y] =='9' || grid[curr_x-1][curr_y] =='0' ){
         avoid(&curr_x,&curr_y, direction, taskid);
       }
       grid[curr_x-1][curr_y] = taskid;
