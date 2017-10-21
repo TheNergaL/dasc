@@ -45,7 +45,6 @@ int main (int argc, char **argv)
 
     //drones all start at [1,1], [2,2], [3,3] ... [n,n]
     //all packages are located at arbitrary locations through the airspace
-    srand ( time(0) ); //proper random seeding
     int r1 = rand() % MAP_SIZE;
     int r2 = rand() % MAP_SIZE; 
     threadDataArr[t].thread_id = t;
