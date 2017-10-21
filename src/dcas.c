@@ -8,7 +8,7 @@
 #define NUM_OBSTACLES 2
 #define LENGTH 50
 
-int sleep_time = 200000;//in milliseconds
+int sleep_time = 200000;
 
 char grid[LENGTH][LENGTH];
 
@@ -31,7 +31,7 @@ struct obstacles{
 };
 struct obstacles obstacle_array[NUM_OBSTACLES];
 
-int main (int argc, char *argv[])
+int main (int argc, char **argv)
 {
   create_grid();
   set_obstacles();
@@ -55,7 +55,6 @@ int main (int argc, char *argv[])
       exit(-1);
     }
   }
-  /* Last thing that main() should do */
   pthread_exit(NULL);
 }
 
@@ -177,8 +176,6 @@ void *move_drone(void *threadarg){
 }
 
 void print_grid(){
- 
-	printf("\e[1;1H\e[2J");
 	for(int i = 0; i < LENGTH; i++){
 		for (int j = 0; j < LENGTH; j++){
 			printf("%c", grid[i][j]);
