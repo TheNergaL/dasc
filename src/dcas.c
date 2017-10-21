@@ -45,14 +45,13 @@ int main (int argc, char **argv)
 
     // TODO: add packages to be arbitrary
     int r1 = rand() % MAP_SIZE;
-    int r2 = rand() % MAP_SIZE - r1; //guarantee 2nd random won't be same as first
+    int r2 = rand() % MAP_SIZE; //guarantee 2nd random won't be same as first
     thread_data_array[t].thread_id = t;
     thread_data_array[t].airport_x = t;
     thread_data_array[t].airport_y = t;
-    if (r1 != r2) {
     thread_data_array[t].package_x = t+r1;
     thread_data_array[t].package_y = t+r2;
-    }
+
     retVal = pthread_create(&threads[t], NULL, fly, (void *) &thread_data_array[t]);
     if (retVal) {
       printf("ERROR: return code from pthread_create() is %d\n", retVal);
