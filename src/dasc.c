@@ -95,7 +95,7 @@ void avoidCollision(int i, int j, int x, int y){
 	//for the case where the home position vertical coordinate is less than destination position vertical coordinate
 	if(j<y){
 			//check if the block of space upwards is open or not
-			if(checkClearAirspace(i-1,j)==true){
+			if(checkClearAirspace(i-1,j)){
 					//move vertical upwards one time
 					pthread_mutex_lock(&mtx);
 					airspace[i-1][j]=s;
@@ -200,7 +200,7 @@ void avoidCollision(int i, int j, int x, int y){
 	//for the case where the home position vertical coordinate is more than destination position vertical coordinate
 	if(j>y){
 			//check if the block of space upwards is open or not
-			if(checkClearAirspace(i-1,j)==true){
+			if(checkClearAirspace(i-1,j)){
 					//move vertically upwards one time
 					pthread_mutex_lock(&mtx);
 					airspace[i-1][j]=s;	
@@ -305,7 +305,7 @@ void avoidCollision(int i, int j, int x, int y){
 	//for the case where the home position horizontal coordinate is less than destination position horizontal coordinate 
 	if(i<x){
 			//check if the block of space on the left is open or not
-			if(checkClearAirspace(i,j-1)==true){
+			if(checkClearAirspace(i,j-1)){
 					//move horizontal left one time
 					pthread_mutex_lock(&mtx);
 					airspace[i][j-1]=s;
@@ -411,7 +411,7 @@ void avoidCollision(int i, int j, int x, int y){
 	//for the case where the home position horizontal coordinate is more than destination position horizontal coordinate 
 	if(i>x){
 				//check if the block of space on the right is open or not
-				if(checkClearAirspace(i,j+1)==true){
+				if(checkClearAirspace(i,j+1)){
 					//move horizontal right one time
 					pthread_mutex_lock(&mtx);
 					airspace[i][j+1]=s;
@@ -524,7 +524,7 @@ void moveDrone(int i, int j, int x, int y){
 		//for the case where the drone position vertical coordinate is less than destination postion vertical coordinate 
 		if((j<y)){
 			//check if the block of space on the right is open or not
-			if(checkClearAirspace(i,j+1)==true){	
+			if(checkClearAirspace(i,j+1)){	
 				//move right one time
 				pthread_mutex_lock(&mtx);
 				airspace[i][j+1]=s; 
@@ -541,7 +541,7 @@ void moveDrone(int i, int j, int x, int y){
 			}else{
 				//if space on the right is occupied avoid collision or signal collision taking place 
 				avoidCollision(i,j,x,y);
-			//	signalD(i,j+1);
+			//	omgCollision(i,j+1);
 				j=j+2;
 			}
 					
@@ -549,7 +549,7 @@ void moveDrone(int i, int j, int x, int y){
 		//for the case where the drone position vertical coordinate is more than destination position vertical coordinate
 		if((j>y)){
 			//check if the block of space on the left is open or not
-			if(checkClearAirspace(i,j-1)==true){
+			if(checkClearAirspace(i,j-1)){
 				//move left one time
 				pthread_mutex_lock(&mtx);
 				airspace[i][j-1]=s;
@@ -566,7 +566,7 @@ void moveDrone(int i, int j, int x, int y){
 			}else{
 				//if the space on the left is occupied avoid collision or signal collision taking place
 				avoidCollision(i,j,x,y);
-			//	signalD(i,j-1);
+			//	omgCollision(i,j-1);
 				j=j-2;
 			}
 		}
@@ -576,7 +576,7 @@ void moveDrone(int i, int j, int x, int y){
 		//for the case where the drone position horizontal coordinate is less than destination position horizontal coordinate
 		if((i<x)){
 			//check if the block of space downwards is open or not
-			if(checkClearAirspace(i+1,j)==true){
+			if(checkClearAirspace(i+1,j)){
 				//move downwards one time
 				pthread_mutex_lock(&mtx);
 				airspace[i+1][j]=s;	
@@ -593,14 +593,14 @@ void moveDrone(int i, int j, int x, int y){
 			}else{
 				//if the space downwards is occupied avoid collision or signal collision taking place
 				avoidCollision(i,j,x,y);
-			//	signalD(i+1,j);
+			//	omgCollision(i+1,j);
 				i=i+2;
 			}
 		}	
 		//for the case where the drone position horizontal coordinate is more than destination position horizontal coordinate
 		if((i>x)){
 			//check if the block of space upwards is open or not
-			if(checkClearAirspace(i-1,j)==true){
+			if(checkClearAirspace(i-1,j)){
 				//move upwards one time
 				pthread_mutex_lock(&mtx);
 				airspace[i-1][j]=s;
@@ -617,7 +617,7 @@ void moveDrone(int i, int j, int x, int y){
 			}else{
 				//if the space upwards is occupied avoid collision or signal collision taking place
 				avoidCollision(i,j,x,y);
-			//	signalD(i-1,j);
+			//	omgCollision(i-1,j);
 				i=i-2;
 			}
 		}
