@@ -34,7 +34,7 @@ void setMap(Drone *d,Map *m){
 	}
 }
 
-void removeOld(Map *m,Coord c){
+void removeOld(Map *m,Coordinate c){
 		int k;
 		if(c.point[0] != m->base[0].point[0] && c.point[1] != m->base[0].point[1]){
 			m->map[c.point[0]][c.point[1]].drone -= 1;
@@ -54,7 +54,7 @@ void removeOld(Map *m,Coord c){
 }
 
 //	dir is either 0 = negative or 1 = positive
-void setAvoid(Map *m,Drone *d,Coord c,int dir,int axis){
+void setAvoid(Map *m,Drone *d,Coordinate c,int dir,int axis){
 	if(axis == 0){
 		if(dir == 0){
 			pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
@@ -98,7 +98,7 @@ void setAvoid(Map *m,Drone *d,Coord c,int dir,int axis){
 }
 
 //	Navigates around items and prevents drone from looping in a circle
-int isLocked(Drone *d,Map *m,Coord c,Coord locked,int lock){
+int isLocked(Drone *d,Map *m,Coordinate c,Coordinate locked,int lock){
 	if(m->map[locked.point[0]][locked.point[1]].locked == 1){
 			switch(lock){
 				case 1:		//Up is blocked
@@ -670,7 +670,7 @@ int move(Drone *d,Map *m,int state){
 		m->runway[i] = 1;
 	}
 	
-	Coord c = d->currLocation;	//old location
+	Coordinate c = d->currLocation;	//old location
 	
 	if(c.point[1] == d->destLocation.point[1] || c.point[0] == d->destLocation.point[0] || d->destLocation.point[1] == 0 && d->destLocation.point[0] == 0){
 		d->move = 0;
@@ -683,7 +683,7 @@ int move(Drone *d,Map *m,int state){
 	}
 	//Move up
 	else if(d->destLocation.point[0] < d->currLocation.point[0] && d->avoid != 2 && d->avoid2 != 2 && d->move == 0){
-		Coord locked = c;
+		Coordinate locked = c;
 		locked.point[0] -= 1;
 		if(isLocked(d,m,c,locked,1) == 0){
 			pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
@@ -699,7 +699,7 @@ int move(Drone *d,Map *m,int state){
 	}
 	//Move down
 	else if(d->destLocation.point[0] > d->currLocation.point[0] && d->avoid != 1 && d->avoid2 != 1 && d->move == 0){
-		Coord locked = c;
+		Coordinate locked = c;
 		locked.point[0] += 1;
 		if(isLocked(d,m,c,locked,2) == 0){
 			pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
@@ -715,7 +715,7 @@ int move(Drone *d,Map *m,int state){
 	}
 	//Move left
 	else if(d->destLocation.point[1] < d->currLocation.point[1] && d->avoid != 4 && d->avoid2 != 4){
-		Coord locked = c;
+		Coordinate locked = c;
 		locked.point[1] -= 1;
 		if(isLocked(d,m,c,locked,3) == 0){
 			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
@@ -732,7 +732,7 @@ int move(Drone *d,Map *m,int state){
 	}
 	//Move right
 	else if(d->destLocation.point[1] > d->currLocation.point[1] && d->avoid != 3 && d->avoid2 != 3){
-		Coord locked = c;
+		Coordinate locked = c;
 		locked.point[1] += 1;
 		if(isLocked(d,m,c,locked,4) == 0){
 			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
@@ -750,7 +750,7 @@ int move(Drone *d,Map *m,int state){
 	//Move around object in left right
 	else if(d->destLocation.point[0] == d->currLocation.point[0]){
 		if (d->currLocation.point[0] == 25){
-			Coord locked = c;
+			Coordinate locked = c;
 			locked.point[0] -= 1;
 			if(isLocked(d,m,c,locked,1) == 0){
 				pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
@@ -765,7 +765,7 @@ int move(Drone *d,Map *m,int state){
 			}
 		}
 		else if(d->currLocation.point[0] == -25){
-			Coord locked = c;
+			Coordinate locked = c;
 			locked.point[0] += 1;
 			if(isLocked(d,m,c,locked,2) == 0){
 				pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
@@ -780,7 +780,7 @@ int move(Drone *d,Map *m,int state){
 			}
 		}
 		else if(d->avoid != 1 && d->avoid2 != 1){
-			Coord locked = c;
+			Coordinate locked = c;
 			locked.point[0] += 1;
 			if(isLocked(d,m,c,locked,2) == 0){
 				pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
@@ -795,7 +795,7 @@ int move(Drone *d,Map *m,int state){
 			}
 		}
 		else if(d->avoid != 2 && d->avoid2 != 2){
-			Coord locked = c;
+			Coordinate locked = c;
 			locked.point[0] -= 1;
 			if(isLocked(d,m,c,locked,1) == 0){
 				pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
@@ -813,7 +813,7 @@ int move(Drone *d,Map *m,int state){
 	//Move around object in up down
 	else if(d->destLocation.point[1] == d->currLocation.point[1]){
 		if(d->currLocation.point[1] == 25){
-			Coord locked = c;
+			Coordinate locked = c;
 			locked.point[1] -= 1;
 			if(isLocked(d,m,c,locked,3) == 0){
 				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
@@ -828,7 +828,7 @@ int move(Drone *d,Map *m,int state){
 			}
 		}
 		else if(d->currLocation.point[1] == -25){
-			Coord locked = c;
+			Coordinate locked = c;
 			locked.point[1] += 1;
 			if(isLocked(d,m,c,locked,4) == 0){
 				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
@@ -843,7 +843,7 @@ int move(Drone *d,Map *m,int state){
 			}
 		}
 		else if (d->avoid != 3 && d->avoid2 != 3){
-			Coord locked = c;
+			Coordinate locked = c;
 			locked.point[1] += 1;
 			if(isLocked(d,m,c,locked,4) == 0){
 				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));
@@ -858,7 +858,7 @@ int move(Drone *d,Map *m,int state){
 			}
 		}
 		else if (d->avoid != 4 && d->avoid2 != 4){
-			Coord locked = c;
+			Coordinate locked = c;
 			locked.point[1] -= 1;
 			if(isLocked(d,m,c,locked,3) == 0){
 				pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
@@ -875,7 +875,7 @@ int move(Drone *d,Map *m,int state){
 	}
 	//Last resort moves
 	else if(d->avoid == 1){
-		Coord locked = c;
+		Coordinate locked = c;
 		locked.point[0] -= 1;
 		if(isLocked(d,m,c,locked,1) == 0){
 			pthread_mutex_lock (&(m->map[d->currLocation.point[0]-1][d->currLocation.point[1]].mtx));
@@ -890,7 +890,7 @@ int move(Drone *d,Map *m,int state){
 		}
 	}
 	else if(d->avoid == 2){
-		Coord locked = c;
+		Coordinate locked = c;
 		locked.point[0] += 1;
 		if(isLocked(d,m,c,locked,2) == 0){
 			pthread_mutex_lock (&(m->map[d->currLocation.point[0]+1][d->currLocation.point[1]].mtx));
@@ -905,7 +905,7 @@ int move(Drone *d,Map *m,int state){
 		}
 	}
 	else if(d->avoid == 3){
-		Coord locked = c;
+		Coordinate locked = c;
 		locked.point[1] -= 1;
 		if(isLocked(d,m,c,locked,3) == 0){
 			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]-1].mtx));
@@ -920,7 +920,7 @@ int move(Drone *d,Map *m,int state){
 		}
 	}
 	else if(d->avoid == 4){
-		Coord locked = c;
+		Coordinate locked = c;
 		locked.point[1] += 1;
 		if(isLocked(d,m,c,locked,4) == 0){
 			pthread_mutex_lock (&(m->map[d->currLocation.point[0]][d->currLocation.point[1]+1].mtx));

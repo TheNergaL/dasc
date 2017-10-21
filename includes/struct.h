@@ -7,7 +7,7 @@
 
 // header of structs to make position tracking and boolean flagging easier
 
-typedef struct Coord{
+typedef struct Coordinate{
     // binary system where 0 = x 1 = y
 	int point[2];  
 } Coordiante;
@@ -38,7 +38,7 @@ typedef struct Map{
 	Box grid[SIZE][SIZE];   				//Orignal grid
 	Box* gridRow[SIZE];     				//Array of pointers to each row
 	Box** map;              				//Pointer of pointers to orignal grid
-	Coord base[5];          				//Center Base and runways
+	Coordinate base[5];          				//Center Base and runways
 	int runway[4];          				//Is runway free?
 	Drone* drones[250];       				//Stores drones
 } Map;
