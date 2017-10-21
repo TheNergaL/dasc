@@ -9,6 +9,7 @@
 #define MAP_SIZE 50
 
 int sleep_2 = 200000;
+pthread_mutex_t mtx;
 
 char airspace[MAP_SIZE][MAP_SIZE];
 
@@ -36,6 +37,7 @@ int main (int argc, char **argv)
   makeMap();
   placeObstacles();
   
+  pthread_mutex_init(&mtx, NULL);
   pthread_t threads[NUM_DRONES]; //Thread Address
   //int *taskids[NUM_DRONES];
   int retVal; //Holds thread return code
@@ -59,38 +61,43 @@ int main (int argc, char **argv)
       exit(-1);
     }
   }
+  pthread_mutex_destroy(&mtx);
   pthread_exit(NULL);
 }
 
 void avoid(int* currPosX, int* currPosY, char nextMove, int taskID){
     
     if(nextMove == '>'){
+            pthread_mutex_lock(&mtx);
             airspace[(*currPosX)++][(*currPosY)] = taskID;//down
             airspace[(*currPosX)][(*currPosY)++] = taskID;//right
             airspace[(*currPosX)][(*currPosY)++] = taskID;//right
             airspace[(*currPosX)--][(*currPosY)] = taskID;//up
-             
+            pthread_mutex_unlock(&mtx);
     }
     if(nextMove == 'V'){
+            pthread_mutex_lock(&mtx);
             airspace[(*currPosX)][(*currPosY)--] = taskID;//left
             airspace[(*currPosX)++][(*currPosY)] = taskID;//down
             airspace[(*currPosX)++][(*currPosY)] = taskID;//down
             airspace[(*currPosX)][(*currPosY)++] = taskID;//right
-        
+            pthread_mutex_unlock(&mtx);
     }
     if(nextMove == '^'){
+            pthread_mutex_lock(&mtx);
             airspace[(*currPosX)][(*currPosY)--] = taskID;//left
             airspace[(*currPosX)--][(*currPosY)] = taskID;//up
             airspace[(*currPosX)--][(*currPosY)] = taskID;//up
             airspace[(*currPosX)][(*currPosY)++] = taskID;//right
-        
+            pthread_mutex_unlock(&mtx);
     }
     if(nextMove == '<'){
+            pthread_mutex_lock(&mtx);
             airspace[(*currPosX)++][(*currPosY)] = taskID;//down
             airspace[(*currPosX)][(*currPosY)--] = taskID;//left
             airspace[(*currPosX)][(*currPosY)--] = taskID;//left
             airspace[(*currPosX)--][(*currPosY)] = taskID;//up
-        
+            pthread_mutex_unlock(&mtx);
     }
 }
 
