@@ -92,34 +92,34 @@ void avoid(int* currPosX, int* currPosY, char nextMove, int taskID){
     
     if(nextMove == '>'){
             pthread_mutex_lock(&mtx);
-            airspace[(*currPosX)++][(*currPosY)] = taskID;//down
-            airspace[(*currPosX)][(*currPosY)++] = taskID;//right
-            airspace[(*currPosX)][(*currPosY)++] = taskID;//right
-            airspace[(*currPosX)--][(*currPosY)] = taskID;//up
+            airspace[(*currPosX)++][(*currPosY)] = taskID;
+            airspace[(*currPosX)][(*currPosY)++] = taskID;
+            airspace[(*currPosX)][(*currPosY)++] = taskID;
+            airspace[(*currPosX)--][(*currPosY)] = taskID;
             pthread_mutex_unlock(&mtx);
     }
-    if(nextMove == 'V'){
+    if(nextMove == 'v'){
             pthread_mutex_lock(&mtx);
-            airspace[(*currPosX)][(*currPosY)--] = taskID;//left
-            airspace[(*currPosX)++][(*currPosY)] = taskID;//down
-            airspace[(*currPosX)++][(*currPosY)] = taskID;//down
-            airspace[(*currPosX)][(*currPosY)++] = taskID;//right
+            airspace[(*currPosX)][(*currPosY)--] = taskID;
+            airspace[(*currPosX)++][(*currPosY)] = taskID;
+            airspace[(*currPosX)++][(*currPosY)] = taskID;
+            airspace[(*currPosX)][(*currPosY)++] = taskID;
             pthread_mutex_unlock(&mtx);
     }
     if(nextMove == '^'){
             pthread_mutex_lock(&mtx);
-            airspace[(*currPosX)][(*currPosY)--] = taskID;//left
-            airspace[(*currPosX)--][(*currPosY)] = taskID;//up
-            airspace[(*currPosX)--][(*currPosY)] = taskID;//up
-            airspace[(*currPosX)][(*currPosY)++] = taskID;//right
+            airspace[(*currPosX)][(*currPosY)--] = taskID;
+            airspace[(*currPosX)--][(*currPosY)] = taskID;
+            airspace[(*currPosX)--][(*currPosY)] = taskID;
+            airspace[(*currPosX)][(*currPosY)++] = taskID;
             pthread_mutex_unlock(&mtx);
     }
     if(nextMove == '<'){
             pthread_mutex_lock(&mtx);
-            airspace[(*currPosX)++][(*currPosY)] = taskID;//down
-            airspace[(*currPosX)][(*currPosY)--] = taskID;//left
-            airspace[(*currPosX)][(*currPosY)--] = taskID;//left
-            airspace[(*currPosX)--][(*currPosY)] = taskID;//up
+            airspace[(*currPosX)++][(*currPosY)] = taskID;
+            airspace[(*currPosX)][(*currPosY)--] = taskID;
+            airspace[(*currPosX)][(*currPosY)--] = taskID;
+            airspace[(*currPosX)--][(*currPosY)] = taskID;
             pthread_mutex_unlock(&mtx);
     }
 }
@@ -214,7 +214,7 @@ void *fly(void *arg0){
       
   }
   
-  nextMove = 'V';
+  nextMove = 'v';
   for(;curr_x < pack_x; curr_x++ ){
       if(airspace[curr_x+1][curr_y] == 'X' || airspace[curr_x+1][curr_y] == '1' || airspace[curr_x+1][curr_y] == '2'
       || airspace[curr_x+1][curr_y] == '3' || airspace[curr_x+1][curr_y] == '4' || airspace[curr_x+1][curr_y] == '5'
