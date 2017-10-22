@@ -24,7 +24,7 @@ The drones are represented by their pthread numbers, 0, 1, 2....
 Upon instantiation, each drone is assigned a package to pick up arb0itrarily. These are represented by the apex of the drone's flight path (the position
 where the drone turns around to come back home.) 
 
-There are also obstacles for the to avoid drone printed about the map, represented by char 'X'
+There are also obstacles for the done to avoid printed randomly about the map, represented by char 'X'
 
 The drones will navigate to their respective packages avoiding obstacles and other drones along the way. Before each movement, the drone looks ahead
 to it's next X and Y coordinate moves to ensure there are no obstacles or other drones in the way. If there are, it searches for the nearest clear path to take 
