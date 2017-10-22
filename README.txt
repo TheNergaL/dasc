@@ -15,7 +15,7 @@ In the bash shell, in the dasc directory, type 'gcc -std=c99 dcas.c -o dcas.exe 
 This will envoke the GNU C Compiler with the C99 standarad on your .c file, linking the pthread library for building, and create 
 and executable called dcas.exe, which can then be run.
 
-Alternatively just run the *nix shell script I've included here by navigating to the dcas directory and typing capture into the terminal.
+Alternatively just run the *nix shell script I've included here by navigating to the dcas directory and typing ./capture into the terminal.
 
 *Note: I know the output is kinda ugly. There are 10 drones that are created sequentially at [0,0], [1,1], [2,2], ... etc
 
