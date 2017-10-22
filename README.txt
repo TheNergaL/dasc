@@ -44,3 +44,6 @@ mash of numbers which is hard to make sense of. You can check that all drones su
 by seeing that they've all returned back to their starting positions.
 
 Output best viewed in a full-screen terminal window.
+
+*Note #2: Sometimes, very rarely, the program segfaults while the drones are returning home. 
+If this occurs please make clean and rebuild the program and run it again. Happy grading.
