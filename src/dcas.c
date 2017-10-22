@@ -87,39 +87,39 @@ int main (int argc, char **argv)
 }
 
 // function to make sure drone path is clear and if not, move drones to avoid collisions
-// takes in the drone's current x,y possition, their next move to check, and a taskID which identifies the next move
-void avoid(int* currPosX, int* currPosY, char nextMove, int taskID){
+// takes in the drone's current x,y possition, their next move to check, and a droneChar which identifies the next move
+void avoid(int* currPosX, int* currPosY, char nextMove, int droneChar){
     
     if(nextMove == '>'){
             pthread_mutex_lock(&mtx);
-            airspace[(*currPosX)++][(*currPosY)] = taskID;
-            airspace[(*currPosX)][(*currPosY)++] = taskID;
-            airspace[(*currPosX)][(*currPosY)++] = taskID;
-            airspace[(*currPosX)--][(*currPosY)] = taskID;
+            airspace[(*currPosX)++][(*currPosY)] = droneChar;
+            airspace[(*currPosX)][(*currPosY)++] = droneChar;
+            airspace[(*currPosX)][(*currPosY)++] = droneChar;
+            airspace[(*currPosX)--][(*currPosY)] = droneChar;
             pthread_mutex_unlock(&mtx);
     }
     if(nextMove == 'v'){
             pthread_mutex_lock(&mtx);
-            airspace[(*currPosX)][(*currPosY)--] = taskID;
-            airspace[(*currPosX)++][(*currPosY)] = taskID;
-            airspace[(*currPosX)++][(*currPosY)] = taskID;
-            airspace[(*currPosX)][(*currPosY)++] = taskID;
+            airspace[(*currPosX)][(*currPosY)--] = droneChar;
+            airspace[(*currPosX)++][(*currPosY)] = droneChar;
+            airspace[(*currPosX)++][(*currPosY)] = droneChar;
+            airspace[(*currPosX)][(*currPosY)++] = droneChar;
             pthread_mutex_unlock(&mtx);
     }
     if(nextMove == '^'){
             pthread_mutex_lock(&mtx);
-            airspace[(*currPosX)][(*currPosY)--] = taskID;
-            airspace[(*currPosX)--][(*currPosY)] = taskID;
-            airspace[(*currPosX)--][(*currPosY)] = taskID;
-            airspace[(*currPosX)][(*currPosY)++] = taskID;
+            airspace[(*currPosX)][(*currPosY)--] = droneChar;
+            airspace[(*currPosX)--][(*currPosY)] = droneChar;
+            airspace[(*currPosX)--][(*currPosY)] = droneChar;
+            airspace[(*currPosX)][(*currPosY)++] = droneChar;
             pthread_mutex_unlock(&mtx);
     }
     if(nextMove == '<'){
             pthread_mutex_lock(&mtx);
-            airspace[(*currPosX)++][(*currPosY)] = taskID;
-            airspace[(*currPosX)][(*currPosY)--] = taskID;
-            airspace[(*currPosX)][(*currPosY)--] = taskID;
-            airspace[(*currPosX)--][(*currPosY)] = taskID;
+            airspace[(*currPosX)++][(*currPosY)] = droneChar;
+            airspace[(*currPosX)][(*currPosY)--] = droneChar;
+            airspace[(*currPosX)][(*currPosY)--] = droneChar;
+            airspace[(*currPosX)--][(*currPosY)] = droneChar;
             pthread_mutex_unlock(&mtx);
     }
 }
@@ -179,20 +179,20 @@ void placeObstacles(){
 // avoiding collisions and reprinting the map with each iteration.
 
 void *fly(void *arg0){
-  int taskID;
+  int droneChar;
   int home_x, home_y;
   int pack_x, pack_y;
   struct threadData *data;
 
   data = (struct threadData *) arg0;
-  taskID = data->thread_id;
-  taskID += 48 ; //ASCII 0 = 'drone' #1, ASCII 1 (49) = 'drone' #2,  etc
+  droneChar = data->thread_id;
+  droneChar += 48 ; //ASCII 0 = 'drone' #1, ASCII 1 (49) = 'drone' #2,  etc
   home_x = data->airport_x;
   home_y = data->airport_y;
   pack_x = data->package_x;
   pack_y = data->package_y;
   
-  airspace[home_x][home_y] = taskID;
+  airspace[home_x][home_y] = droneChar;
   printMap();
   
   int curr_x = home_x;
@@ -204,9 +204,9 @@ void *fly(void *arg0){
       || airspace[curr_x][curr_y+1] == '3' || airspace[curr_x][curr_y+1] == '4' || airspace[curr_x][curr_y+1] == '5'
       || airspace[curr_x][curr_y+1] == '6' || airspace[curr_x][curr_y+1] == '7' || airspace[curr_x][curr_y+1] == '8'
       || airspace[curr_x][curr_y+1] == '9' || airspace[curr_x][curr_y+1] == '0'){
-        avoid(&curr_x,&curr_y, nextMove, taskID);
+        avoid(&curr_x,&curr_y, nextMove, droneChar);
       }
-      airspace[curr_x][curr_y+1] = taskID;
+      airspace[curr_x][curr_y+1] = droneChar;
       airspace[curr_x][curr_y] = nextMove;
       printMap();
       
@@ -220,9 +220,9 @@ void *fly(void *arg0){
       || airspace[curr_x+1][curr_y] == '3' || airspace[curr_x+1][curr_y] == '4' || airspace[curr_x+1][curr_y] == '5'
       || airspace[curr_x+1][curr_y] == '6' || airspace[curr_x+1][curr_y] == '7' || airspace[curr_x+1][curr_y] == '8'
       || airspace[curr_x+1][curr_y] == '9' || airspace[curr_x+1][curr_y] == '0'){
-        avoid(&curr_x,&curr_y, nextMove, taskID);
+        avoid(&curr_x,&curr_y, nextMove, droneChar);
       }
-      airspace[curr_x+1][curr_y] = taskID;
+      airspace[curr_x+1][curr_y] = droneChar;
       airspace[curr_x][curr_y] = nextMove;
       printMap();
       usleep(sleep_2);
@@ -235,9 +235,9 @@ void *fly(void *arg0){
       || airspace[curr_x-1][curr_y] =='3' || airspace[curr_x-1][curr_y] =='4' || airspace[curr_x-1][curr_y] =='5' 
       || airspace[curr_x-1][curr_y] =='6' || airspace[curr_x-1][curr_y] =='7' || airspace[curr_x-1][curr_y] =='8'
       || airspace[curr_x-1][curr_y] =='9' || airspace[curr_x-1][curr_y] =='0' ){
-        avoid(&curr_x,&curr_y, nextMove, taskID);
+        avoid(&curr_x,&curr_y, nextMove, droneChar);
       }
-      airspace[curr_x-1][curr_y] = taskID;
+      airspace[curr_x-1][curr_y] = droneChar;
       airspace[curr_x][curr_y] = nextMove;
       printMap();
       usleep(sleep_2);
@@ -250,9 +250,9 @@ void *fly(void *arg0){
       || airspace[curr_x][curr_y-1] == '3' || airspace[curr_x][curr_y-1] == '4'|| airspace[curr_x][curr_y-1] == '5'
       || airspace[curr_x][curr_y-1] == '6' || airspace[curr_x][curr_y-1] == '7'|| airspace[curr_x][curr_y-1] == '8'
       || airspace[curr_x][curr_y-1] == '9' || airspace[curr_x][curr_y-1] == '0'){
-        avoid(&curr_x,&curr_y, nextMove, taskID);
+        avoid(&curr_x,&curr_y, nextMove, droneChar);
       }
-      airspace[curr_x][curr_y-1] = taskID;
+      airspace[curr_x][curr_y-1] = droneChar;
       airspace[curr_x][curr_y] = nextMove;
       printMap();
       usleep(sleep_2);
