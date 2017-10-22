@@ -1,11 +1,11 @@
-Script started on Sun 22 Oct 2017 00:54:05 BST
+Script started on Sun 22 Oct 2017 02:31:24 BST
 ]0;osboxes@osboxes: ~/dascosboxes@osboxes:~/dasc$ make
 gcc -std=c99 src/dcas.c -o tuckerpo_proj1 -pthread
 src/dcas.c: In function ‘fly’:
-src/dcas.c:155:7: warning: implicit declaration of function ‘usleep’ [-Wimplicit-function-declaration]
+src/dcas.c:213:7: warning: implicit declaration of function ‘usleep’ [-Wimplicit-function-declaration]
        usleep(sleep_2);
        ^
-]0;osboxes@osboxes: ~/dascosboxes@osboxes:~/dasc$ ./tuckerpo_proj1 > out.out
+]0;osboxes@osboxes: ~/dascosboxes@osboxes:~/dasc$ ./tuckerpo_proj1 > output.out
 ]0;osboxes@osboxes: ~/dascosboxes@osboxes:~/dasc$ exit
 
-Script done on Sun 22 Oct 2017 00:54:52 BST
+Script done on Sun 22 Oct 2017 02:32:02 BST
