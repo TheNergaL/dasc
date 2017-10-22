@@ -103,14 +103,43 @@ void avoid(int* currPosX, int* currPosY, char nextMove, int taskID){
 
 // define x, y positions of obstacles and places them on the airspace
 void placeObstacles(){
+    int obsx_r1 = rand() % MAP_SIZE;
+    int obsy_r1 = rand() % MAP_SIZE;
+    int obsx_r2 = rand() % MAP_SIZE;
+    int obsy_r2 = rand() % MAP_SIZE;
+    int obsx_r3 = rand() % MAP_SIZE;
+    int obsy_r3 = rand() % MAP_SIZE;
+    int obsx_r4 = rand() % MAP_SIZE;
+    int obsy_r4 = rand() % MAP_SIZE;
+    int obsx_r5 = rand() % MAP_SIZE;
+    int obsy_r5 = rand() % MAP_SIZE;
+    int obsx_r6 = rand() % MAP_SIZE;
+    int obsy_r6 = rand() % MAP_SIZE;
+    int obsx_r7 = rand() % MAP_SIZE;
+    int obsy_r7 = rand() % MAP_SIZE;
+    int obsx_r8 = rand() % MAP_SIZE;
+    int obsy_r8 = rand() % MAP_SIZE;
+    // keep 0 and 1 static for demo purposes
     obsArr[0].obs_x = 0;
     obsArr[0].obs_y = 5;
     obsArr[1].obs_x = 5;
     obsArr[1].obs_y = 10;
-    obsArr[2].obs_x = 5;
-    obsArr[2].obs_y = 15;
-    obsArr[3].obs_x = 8;
-    obsArr[3].obs_y = 14;
+    obsArr[2].obs_x = obsx_r1;
+    obsArr[2].obs_y = obsy_r1;
+    obsArr[3].obs_x = obsx_r2;
+    obsArr[3].obs_y = obsy_r2;
+    obsArr[4].obs_x = obsx_r3;
+    obsArr[4].obs_y = obsy_r3;
+    obsArr[5].obs_x = obsx_r4;
+    obsArr[5].obs_y = obsy_r4;
+    obsArr[6].obs_x = obsx_r5;
+    obsArr[6].obs_y = obsy_r5;
+    obsArr[7].obs_x = obsx_r6;
+    obsArr[7].obs_y = obsy_r6;
+    obsArr[8].obs_x = obsx_r7;
+    obsArr[8].obs_y = obsy_r7;
+    obsArr[9].obs_x = obsx_r8;
+    obsArr[9].obs_y = obsy_r8;
     
     for(int i = 0; i < NUM_OBSTACLES; i++){
         int x = obsArr[i].obs_x;
